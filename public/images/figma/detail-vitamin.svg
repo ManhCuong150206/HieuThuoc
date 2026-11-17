@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="500" height="360" viewBox="0 0 500 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame">
+<path id="Vector" d="M330 48H170C163.373 48 158 53.3726 158 60V80C158 86.6274 163.373 92 170 92H330C336.627 92 342 86.6274 342 80V60C342 53.3726 336.627 48 330 48Z" fill="#176B50"/>
+<path id="Vector_2" d="M310 88H190C165.699 88 146 107.699 146 132V278C146 302.301 165.699 322 190 322H310C334.301 322 354 302.301 354 278V132C354 107.699 334.301 88 310 88Z" fill="#F8E7B5" stroke-width="2" stroke="#D8C890"/>
+<path id="Vector_3" d="M354 152H146V274H354V152Z" fill="white"/>
+<g id="Vector_4">
+<path d="M170 174H330Z" fill="black"/>
+<path d="M170 174H330" stroke-width="10" stroke="#176B50"/>
+</g>
+<path id="Vector_5" d="M200 248C213.255 248 224 237.255 224 224C224 210.745 213.255 200 200 200C186.745 200 176 210.745 176 224C176 237.255 186.745 248 200 248Z" fill="#F5CF70"/>
+<g id="Vector_6">
+<path d="M242 212H324ZM242 232H308ZM242 252H298Z" fill="black"/>
+<path d="M242 212H324M242 232H308M242 252H298" stroke-width="6" stroke="#B2C8BB"/>
+</g>
+</g>
+</svg>

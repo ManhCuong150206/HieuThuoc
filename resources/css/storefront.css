@@ -1,0 +1,97 @@
+:root {
+    --site-width: 1280px;
+    --gutter: clamp(24px, 5.5556vw, 80px);
+    --radius-badge: 6px;
+    --radius-input: 8px;
+    --radius-button: 10px;
+    --radius-search: 12px;
+    --radius-art: 14px;
+    --radius-card: 16px;
+    --radius-panel: 24px;
+}
+
+body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+}
+
+.site-container {
+    width: min(var(--site-width), calc(100% - 2 * var(--gutter)));
+    margin-inline: auto;
+}
+
+.site-header { background: var(--color-surface); }
+.utility-bar { background: var(--color-dark); color: var(--color-surface); font-size: 12px; }
+.utility-inner { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 37px; }
+.utility-links { display: flex; align-items: center; gap: 13px; }
+.utility-links a:hover, .site-footer a:hover { text-decoration: underline; }
+.utility-bar :focus-visible, .site-footer :focus-visible { outline-color: var(--color-pale); }
+
+.header-main { display: flex; align-items: center; gap: 32px; min-height: 135px; padding-block: 22px; }
+.header-logo { display: block; width: 185px; flex: 0 0 auto; }
+.header-logo img { width: 185px; height: 91px; object-fit: cover; }
+.header-search {
+    display: flex; align-items: center; gap: 12px; min-width: 0; flex: 0 1 594px;
+    padding: 15px; border-radius: var(--radius-search); background: var(--color-paper);
+}
+.header-search img, .header-action img { flex: 0 0 24px; }
+.header-search input { width: 100%; min-width: 0; }
+.header-search input::placeholder { color: var(--color-muted); opacity: 1; }
+.header-search:focus-within { outline: 2px solid var(--color-brand); outline-offset: 2px; }
+.header-search input:focus-visible { outline: 0; }
+.header-actions { display: flex; gap: 32px; align-items: center; }
+.header-action { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.header-menu { display: flex; justify-content: flex-start; align-items: center; gap: 31px; min-height: 50px; }
+.header-menu li { white-space: nowrap; }
+.header-menu, .header-action { font-size: 14px; font-weight: 500; }
+.header-action:hover, .header-action.is-active, .header-menu a:hover,
+.header-menu [aria-current] { color: var(--color-brand); }
+
+.site-footer { background: var(--color-dark); color: var(--color-pale); padding-block: 48px; }
+.footer-columns { display: grid; grid-template-columns: 370fr repeat(3, 210fr); gap: clamp(20px, 4.86vw, 70px); margin-bottom: 24px; }
+.footer-about { display: grid; gap: 9px; justify-items: start; font-size: 14px; }
+.footer-logo { display: block; border-radius: var(--radius-badge); overflow: hidden; }
+.footer-logo img { width: 105px; height: 43px; object-fit: cover; }
+.site-footer ul { display: grid; gap: 10px; font-size: 13px; }
+.site-footer h2 { color: var(--color-surface); font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+.footer-note { font-size: 12px; }
+
+@media (min-width: 1201px) {
+    .footer-columns { padding-right: 70px; }
+    body.home .header-logo { width: 169px; overflow: hidden; }
+    body.home .header-logo img { max-width: none; }
+}
+@media (max-width: 950px) {
+    .header-main, .header-actions { gap: 20px; }
+    .header-navigation { overflow: auto; }
+    .header-menu { gap: 20px; padding-block: 6px; }
+    .header-menu:last-child li:last-child { padding-right: var(--gutter); }
+    .footer-columns { grid-template-columns: 1.15fr repeat(3, 1fr); }
+}
+@media (max-width: 820px) {
+    .header-main { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; padding-block: 8px; }
+    .header-search { grid-row: 2; grid-column: 1 / -1; padding: 11px; }
+    .header-actions { grid-row: 1; grid-column: 2; }
+}
+@media (max-width: 640px) {
+    :root { --gutter: 18px; }
+    .utility-inner { justify-content: center; }
+    .utility-inner > p { display: none; }
+    .header-logo, .header-logo img { width: 128px; }
+    .header-logo img { height: 65px; }
+    .header-actions { gap: 12px; }
+    .header-action, .header-menu { font-size: 13px; }
+    .header-action img { width: 18px; height: 18px; flex-basis: 18px; }
+    .header-action { gap: 5px; }
+    .footer-columns { grid-template-columns: 1fr 1fr; gap: 22px 16px; }
+    .footer-about { grid-column: 1 / -1; }
+    .site-footer { padding-block: 32px; }
+}

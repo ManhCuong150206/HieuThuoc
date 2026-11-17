@@ -1,0 +1,29 @@
+@import 'tailwindcss';
+@import './fonts.css';
+@import './storefront.css';
+@import './interface.css';
+@import './catalog.css';
+@import './transactions.css';
+@import './admin.css';
+
+@source '../views/**/*.blade.php';
+@source '../js/**/*.js';
+
+@theme static {
+    --font-sans: 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
+    --color-brand: #176b50;
+    --color-dark: #103e32;
+    --color-ink: #172f29;
+    --color-muted: #62756e;
+    --color-paper: #f6f8f5;
+    --color-surface: #ffffff;
+    --color-pale: #eaf5ef;
+    --color-line: #dee8e2;
+    --color-lime: #ddf19b;
+    --color-info: #eaf1fa;
+    --color-warm: #fff5e2;
+    --color-orange: #a46822;
+    --color-field: #d9d9d9;
+    --color-hover: #1e1e1e;
+    --color-hover-border: #2c2c2c;
+}

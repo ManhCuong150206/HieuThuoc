@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="80" height="57.6" viewBox="0 0 80 57.6" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame">
+<path id="Vector" d="M52.8 7.68H27.2C26.1396 7.68 25.28 8.53961 25.28 9.6V12.8C25.28 13.8604 26.1396 14.72 27.2 14.72H52.8C53.8604 14.72 54.72 13.8604 54.72 12.8V9.6C54.72 8.53961 53.8604 7.68 52.8 7.68Z" fill="#176B50"/>
+<path id="Vector_2" d="M49.6 14.08H30.4C26.5119 14.08 23.36 17.2319 23.36 21.12V44.48C23.36 48.3681 26.5119 51.52 30.4 51.52H49.6C53.4881 51.52 56.64 48.3681 56.64 44.48V21.12C56.64 17.2319 53.4881 14.08 49.6 14.08Z" fill="#F8E7B5" stroke-width="0.32" stroke="#D8C890"/>
+<path id="Vector_3" d="M56.64 24.32H23.36V43.84H56.64V24.32Z" fill="white"/>
+<g id="Vector_4">
+<path d="M27.2 27.84H52.8Z" fill="black"/>
+<path d="M27.2 27.84H52.8" stroke-width="1.6" stroke="#176B50"/>
+</g>
+<path id="Vector_5" d="M32 39.68C34.1208 39.68 35.84 37.9608 35.84 35.84C35.84 33.7192 34.1208 32 32 32C29.8792 32 28.16 33.7192 28.16 35.84C28.16 37.9608 29.8792 39.68 32 39.68Z" fill="#F5CF70"/>
+<g id="Vector_6">
+<path d="M38.72 33.92H51.84ZM38.72 37.12H49.28ZM38.72 40.32H47.68Z" fill="black"/>
+<path d="M38.72 33.92H51.84M38.72 37.12H49.28M38.72 40.32H47.68" stroke-width="0.96" stroke="#B2C8BB"/>
+</g>
+</g>
+</svg>
