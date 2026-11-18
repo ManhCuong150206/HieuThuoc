@@ -2,22 +2,24 @@
 @section('title', 'Đăng nhập')
 @section('content')
 <div class="site-container auth-layout">
-    <section class="auth-welcome">
-        <x-badge>AN TÂM ĐỒNG HÀNH</x-badge>
-        <h2>Một tài khoản.<br>Trọn vẹn chăm sóc.</h2>
-        <p>Lưu sản phẩm yêu thích, theo dõi đơn hàng và mua lại những sản phẩm bạn tin dùng.</p>
-        <div class="auth-art"><x-icon name="login-art" /></div>
-    </section>
     <section class="auth-panel" aria-labelledby="login-title">
         <div class="section-title"><h1 id="login-title">Chào mừng bạn trở lại</h1><p class="section-description">Đăng nhập để tiếp tục cùng An Tâm.</p></div>
-        <x-input id="login-identity" label="Email hoặc số điện thoại" placeholder="Nhập email hoặc số điện thoại" />
-        <x-input id="login-password" label="Mật khẩu" type="password" placeholder="Nhập mật khẩu" />
-        <div class="login-options">
-            <label class="check-label"><input type="checkbox"> Ghi nhớ đăng nhập</label>
-            <span>Quên mật khẩu?</span>
-        </div>
-        <x-button class="full-width">Đăng nhập</x-button>
-        <p class="login-signup">Chưa có tài khoản? &nbsp;<strong>Đăng ký ngay</strong></p>
+        <form class="auth-form" method="POST" action="{{ route('login.submit') }}">
+            @csrf
+            @if (session('status'))
+                <p class="auth-success" role="status">{{ session('status') }}</p>
+            @endif
+            @if ($errors->any())
+                <p role="alert">{{ $errors->first() }}</p>
+            @endif
+            <x-input id="login-identity" name="username" label="Tên đăng nhập" placeholder="Nhập tên đăng nhập" :value="old('username')" autocomplete="username" required />
+            <x-input id="login-password" name="password" label="Mật khẩu" type="password" placeholder="Nhập mật khẩu" autocomplete="current-password" required />
+            <div class="login-options">
+                <span>Quên mật khẩu?</span>
+            </div>
+            <x-button type="submit" class="full-width">Đăng nhập</x-button>
+        </form>
+        <p class="login-signup">Chưa có tài khoản? &nbsp;<a href="{{ route('register') }}"><strong>Đăng ký ngay</strong></a></p>
         <p class="login-terms">Đăng nhập đồng nghĩa bạn đồng ý với Điều khoản sử dụng và Chính sách bảo mật.</p>
     </section>
 </div>

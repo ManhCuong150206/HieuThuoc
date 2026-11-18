@@ -71,6 +71,11 @@
 .account-panel { gap: 20px; }
 .account-panel h2, .checkout-summary h2 { font-size: 22px; }
 .profile-name { gap: 24px; }
+.profile-form { display: grid; gap: 20px; }
+.profile-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 12px; }
+.account-identity strong, .account-order-items, .order-card { overflow-wrap: anywhere; }
+.order-card summary { cursor: pointer; color: var(--color-brand); font-weight: 600; }
+.account-order-items { display: grid; gap: 8px; padding-block: 12px; }
 .profile-email { display: grid; grid-template-columns: minmax(0, 600fr) minmax(0, 312fr); align-items: start; gap: 24px; }
 .order-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 26px; color: var(--color-muted); font-size: 14px; font-weight: 500; }
 .order-filters .is-active { color: var(--color-brand); }
@@ -84,28 +89,26 @@
 .order-card-copy p { font-size: 14px; color: var(--color-muted); }
 
 .auth-layout {
-    display: grid; grid-template-columns: minmax(0, 620fr) minmax(0, 600fr); align-items: start; gap: 60px; padding-block: 80px;
+    display: flex; justify-content: center; align-items: flex-start; padding-block: 56px;
 }
-.auth-welcome, .auth-panel { display: grid; gap: 24px; align-content: start; padding: 40px; border-radius: var(--radius-panel); }
-.auth-welcome { background: var(--color-pale); }
-.auth-welcome h2 { color: var(--color-dark); font-size: 40px; font-weight: 700; }
-.auth-welcome > p { color: var(--color-muted); font-size: 17px; }
-.auth-art { display: grid; place-items: center; height: 240px; border-radius: var(--radius-art); background: var(--color-paper); }
-.auth-art img { max-height: 240px; }
-.auth-panel { gap: 22px; background: var(--color-surface); }
-.auth-panel .section-title { gap: 22px; }
+.auth-panel { display: grid; width: 100%; max-width: 560px; min-width: 0; gap: 22px; align-content: start; padding: 40px; border-radius: var(--radius-panel); background: var(--color-surface); }
+.auth-form { display: grid; gap: 22px; }
+.auth-field-hint { font-size: 13px; color: var(--color-muted); }
+.auth-field-error { font-size: 13px; color: #b42318; }
+.auth-form [aria-invalid="true"] { border-color: #b42318; }
+.auth-success { padding: 12px 16px; background: var(--color-pale); color: var(--color-brand); border-radius: var(--radius-art); }
+.auth-panel .section-title { gap: 12px; text-align: center; }
 .auth-panel h1 { font-size: 28px; font-weight: 700; }
 .login-options { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 13px; }
 .login-options > span { color: var(--color-brand); font-weight: 600; }
-.login-signup { font-size: 14px; font-weight: 500; color: var(--color-brand); }
+.login-signup { font-size: 14px; font-weight: 500; color: var(--color-brand); text-align: center; }
 .login-signup strong { font-weight: 600; }
-.login-terms { font-size: 12px; color: var(--color-muted); }
+.login-terms { font-size: 12px; color: var(--color-muted); text-align: center; }
 
 @media (max-width: 1100px) {
     .cart-row { grid-template-columns: 72px minmax(0, 1fr) 95px auto; gap: 12px; }
     .cart-quantity .quantity { width: 92px; padding-inline: 12px; }
-    .auth-layout { gap: 30px; padding-block: 56px; }
-    .auth-welcome, .auth-panel { padding: 28px; }
+    .auth-panel { padding: 28px; }
 }
 @media (max-width: 900px) {
     .checkout-layout { grid-template-columns: 1fr; }
@@ -115,15 +118,14 @@
     .order-card-content .ui-button { grid-column: 2; justify-self: start; }
 }
 @media (max-width: 820px) {
-    .auth-layout { grid-template-columns: 1fr; padding-block: 32px; gap: 18px; }
-    .auth-panel { grid-row: 1; }
+    .auth-layout { padding-block: 32px; }
 }
 @media (max-width: 700px) {
     .account-layout { grid-template-columns: 1fr; }
     .account-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 10px; }
 }
 @media (max-width: 640px) {
-    .checkout-panel, .account-panel, .auth-panel, .auth-welcome { padding: 16px; }
+    .checkout-panel, .account-panel, .auth-panel { padding: 16px; }
     .checkout-steps { padding: 14px; font-size: 13px; }
     .cart-row { grid-template-columns: 58px minmax(0, 1fr) auto; align-items: start; }
     .cart-art { height: 56px; }
@@ -136,7 +138,4 @@
     .confirmation-card h1 { font-size: 25px; }
     .confirmation-details { padding: 16px; gap: 12px; font-size: 13px; }
     .confirmation-actions, .profile-email { grid-template-columns: 1fr; gap: 12px; }
-    .auth-welcome h2 { font-size: 32px; }
-    .auth-art { height: 174px; }
-    .auth-art img { max-height: 174px; }
 }

@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Support\MockData;
+use App\Models\Category;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    public function __invoke(string $slug): View
+    public function __invoke(Request $request, Category $category): View
     {
-        $category = MockData::categories()[$slug] ?? abort(404);
-
-        return view('pages.products.index', MockData::catalog($category));
+        return app(ProductController::class)->index($request, $category);
     }
 }

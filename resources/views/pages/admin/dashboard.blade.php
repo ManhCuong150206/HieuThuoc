@@ -24,6 +24,10 @@
         <header class="admin-heading">
             <x-section-title title="Tổng quan nhà thuốc" description="Theo dõi hoạt động và những việc cần xử lý hôm nay." :level="1" />
             <x-badge>Quản trị viên • Nhóm 10</x-badge>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <x-button type="submit" variant="outline">Đăng xuất</x-button>
+            </form>
         </header>
         <div class="admin-filters">
             <x-button variant="outline">Tháng 10, 2026 ⌄</x-button><x-button>Xuất báo cáo</x-button><span class="admin-demo">DỮ LIỆU MINH HỌA</span>

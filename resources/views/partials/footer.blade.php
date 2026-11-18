@@ -1,4 +1,4 @@
-<footer class="site-footer">
+<footer class="site-footer" id="lien-he">
     <div class="site-container">
         <div class="footer-columns">
             <div class="footer-about">
@@ -30,6 +30,6 @@
                 </ul>
             </div>
         </div>
-        <p class="footer-note">© 2026 An Tâm • Bản thiết kế minh họa cho đồ án Nhóm 10</p>
+        <p class="footer-note">© 2026 An Tâm •</p>
     </div>
 </footer>

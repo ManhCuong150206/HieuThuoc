@@ -1,9 +1,15 @@
-@props(['order'])
+@props(['order', 'items', 'statusLabel'])
 <article class="order-card">
-    <div class="order-card-heading"><h3>{{ $order[0] }} &nbsp;•&nbsp; Tháng 10, 2026</h3><x-badge>{{ $order[1] }}</x-badge></div>
-    <div class="order-card-content">
-        <div class="order-card-art"><x-icon name="account-product" /></div>
-        <div class="order-card-copy"><h4>{{ $order[2] }}</h4><p>2 sản phẩm &nbsp;•&nbsp; {{ $order[3] }}</p></div>
-        <x-button variant="outline">{{ $order[4] }}</x-button>
-    </div>
+    <div class="order-card-heading"><h3>{{ $order->order_code }} &nbsp;•&nbsp; {{ \Illuminate\Support\Carbon::parse($order->created_at)->format('d/m/Y') }}</h3><x-badge>{{ $statusLabel }}</x-badge></div>
+    <p>{{ $items->sum('quantity') }} sản phẩm &nbsp;•&nbsp; <strong>{{ number_format($order->total_amount, 0, ',', '.') }}đ</strong></p>
+    <details>
+        <summary>Xem chi tiết đơn hàng</summary>
+        <ul class="account-order-items">
+            @foreach ($items as $item)
+                <li>{{ $item->product_name }} × {{ $item->quantity }} — {{ number_format($item->unit_price * $item->quantity, 0, ',', '.') }}đ</li>
+            @endforeach
+        </ul>
+        <p>Người nhận: {{ $order->recipient_name }} · {{ $order->recipient_phone }}</p>
+        <p>Địa chỉ nhận hàng: {{ $order->shipping_address }}</p>
+    </details>
 </article>
