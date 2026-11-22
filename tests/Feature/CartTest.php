@@ -3,9 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Account;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class CartTest extends TestCase
@@ -14,25 +12,6 @@ class CartTest extends TestCase
     {
         parent::setUp();
 
-        Schema::create('accounts', function (Blueprint $table): void {
-            $table->id();
-            $table->string('username');
-            $table->string('password');
-            $table->string('role');
-            $table->boolean('is_active');
-        });
-        Schema::create('users', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('account_id')->unique()->constrained('accounts');
-        });
-        Schema::create('cart_items', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('product_id')->constrained('products');
-            $table->integer('quantity');
-            $table->unique(['user_id', 'product_id']);
-        });
-
         DB::table('accounts')->insert([
             ['id' => 1, 'username' => 'customer1', 'password' => '123', 'role' => 'CUSTOMER', 'is_active' => true],
             ['id' => 2, 'username' => 'customer2', 'password' => '123', 'role' => 'CUSTOMER', 'is_active' => true],
@@ -40,13 +19,13 @@ class CartTest extends TestCase
         ]);
         // Profile IDs deliberately differ from account IDs.
         DB::table('users')->insert([
-            ['id' => 25, 'account_id' => 1],
-            ['id' => 26, 'account_id' => 2],
+            ['id' => 25, 'account_id' => 1, 'full_name' => 'Khách 1', 'email' => 'cart1@example.com', 'phone' => '0912345678'],
+            ['id' => 26, 'account_id' => 2, 'full_name' => 'Khách 2', 'email' => 'cart2@example.com', 'phone' => '0912345679'],
         ]);
         DB::table('products')->insert([
-            ['id' => 10, 'name' => 'Sản phẩm DB A', 'price' => 10000],
-            ['id' => 11, 'name' => 'Sản phẩm DB B', 'price' => 25000],
-            ['id' => 12, 'name' => 'Sản phẩm riêng khách khác', 'price' => 99000],
+            ['id' => 10, 'category_id' => 1, 'name' => 'Sản phẩm DB A', 'price' => 10000],
+            ['id' => 11, 'category_id' => 1, 'name' => 'Sản phẩm DB B', 'price' => 25000],
+            ['id' => 12, 'category_id' => 1, 'name' => 'Sản phẩm riêng khách khác', 'price' => 99000],
         ]);
     }
 

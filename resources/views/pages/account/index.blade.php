@@ -11,11 +11,12 @@
             <x-button variant="soft" :href="route('account.index').'#thong-tin-ca-nhan'">Thông tin cá nhân</x-button>
             <x-button variant="outline" :href="route('account.index').'#don-hang'">Đơn hàng của tôi</x-button>
             <x-button variant="outline" :href="route('account.index').'#profile-address'">Địa chỉ</x-button>
+            <x-button variant="outline" :href="route('favorites.index')">Sản phẩm yêu thích</x-button>
+            <x-button variant="outline" :href="route('account.index').'#doi-mat-khau'">Đổi mật khẩu</x-button>
         </aside>
         <div class="account-content">
             <section class="account-panel" id="thong-tin-ca-nhan">
                 <h2>Thông tin cá nhân</h2>
-                @if (session('status'))<p class="auth-success" role="status">{{ session('status') }}</p>@endif
                 <form class="profile-form" method="POST" action="{{ route('account.update') }}">
                     @csrf
                     @method('PUT')
@@ -26,6 +27,16 @@
                     <x-input id="profile-email" name="email" label="Email" type="email" :value="old('email', $profile?->email)" autocomplete="email" required :show-error="true" />
                     <x-input id="profile-address" name="address" label="Địa chỉ" :value="old('address', $profile?->address)" autocomplete="street-address" placeholder="Nhập địa chỉ của bạn" :show-error="true" />
                     <div class="profile-actions"><x-button type="submit">Lưu thay đổi</x-button></div>
+                </form>
+            </section>
+            <section class="account-panel" id="doi-mat-khau">
+                <h2>Đổi mật khẩu</h2>
+                <form method="POST" action="{{ route('account.password') }}" class="profile-form">
+                    @csrf @method('PUT')
+                    <x-input id="current-password" name="current_password" type="password" label="Mật khẩu hiện tại" autocomplete="current-password" required />
+                    <x-input id="new-password" name="password" type="password" label="Mật khẩu mới (ít nhất 8 ký tự)" autocomplete="new-password" required />
+                    <x-input id="confirm-password" name="password_confirmation" type="password" label="Nhập lại mật khẩu mới" autocomplete="new-password" required />
+                    <div><x-button type="submit">Đổi mật khẩu</x-button></div>
                 </form>
             </section>
             <section class="account-panel" id="don-hang">

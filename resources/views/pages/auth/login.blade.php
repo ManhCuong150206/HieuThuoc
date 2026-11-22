@@ -6,16 +6,10 @@
         <div class="section-title"><h1 id="login-title">Chào mừng bạn trở lại</h1><p class="section-description">Đăng nhập để tiếp tục cùng An Tâm.</p></div>
         <form class="auth-form" method="POST" action="{{ route('login.submit') }}">
             @csrf
-            @if (session('status'))
-                <p class="auth-success" role="status">{{ session('status') }}</p>
-            @endif
-            @if ($errors->any())
-                <p role="alert">{{ $errors->first() }}</p>
-            @endif
             <x-input id="login-identity" name="username" label="Tên đăng nhập" placeholder="Nhập tên đăng nhập" :value="old('username')" autocomplete="username" required />
             <x-input id="login-password" name="password" label="Mật khẩu" type="password" placeholder="Nhập mật khẩu" autocomplete="current-password" required />
             <div class="login-options">
-                <span>Quên mật khẩu?</span>
+                <a class="text-action" href="{{ route('password.request') }}">Quên mật khẩu?</a>
             </div>
             <x-button type="submit" class="full-width">Đăng nhập</x-button>
         </form>

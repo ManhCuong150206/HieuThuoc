@@ -10,7 +10,7 @@
             <p>Tìm sản phẩm chăm sóc sức khỏe phù hợp.<br>Đặt hàng dễ dàng, chăm sóc tận tâm.</p>
             <div class="hero-actions">
                 <x-button :href="route('products.index')">Khám phá sản phẩm</x-button>
-                <x-button variant="outline">Tư vấn cùng dược sĩ</x-button>
+                <x-button variant="outline" :href="route('help')">Hướng dẫn đặt hàng</x-button>
             </div>
         </div>
         <div class="hero-illustration">
@@ -63,12 +63,16 @@
     <section class="home-section" id="goc-suc-khoe">
         <x-section-title eyebrow="GÓC SỨC KHỎE" title="Hiểu đúng, sống khỏe mỗi ngày" />
         <div class="articles-grid">
-            @foreach ($articles as [$title, $copy])
+            @forelse ($articles as $article)
                 <article class="article-card">
                     <x-badge>KIẾN THỨC SỨC KHỎE</x-badge>
-                    <h3>{{ $title }}</h3><p>{{ $copy }}</p><span class="article-link">Đọc bài viết →</span>
+                    <h3><a href="{{ route('posts.show', $article) }}">{{ $article->title }}</a></h3>
+                    <p>{{ \Illuminate\Support\Str::limit($article->content, 120) }}</p>
+                    <a href="{{ route('posts.show', $article) }}" class="article-link">Đọc bài viết</a>
                 </article>
-            @endforeach
+            @empty
+                <p>Chưa có bài viết được xuất bản.</p>
+            @endforelse
         </div>
     </section>
 </div>

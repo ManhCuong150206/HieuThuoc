@@ -3,10 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Account;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
@@ -14,24 +12,6 @@ class LoginTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        Schema::create('accounts', function (Blueprint $table): void {
-            $table->id();
-            $table->string('username')->unique();
-            $table->string('password');
-            $table->string('role');
-            $table->boolean('is_active')->default(true);
-        });
-        Schema::create('users', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('account_id');
-        });
-        Schema::create('cart_items', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('product_id');
-            $table->integer('quantity');
-        });
 
         DB::table('accounts')->insert([
             ['username' => 'acc1', 'password' => '123', 'role' => 'CUSTOMER', 'is_active' => true],

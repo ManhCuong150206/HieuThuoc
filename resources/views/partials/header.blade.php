@@ -3,10 +3,11 @@
         <a class="header-logo" href="{{ route('home') }}" aria-label="An Tâm Pharmacy — Trang chủ">
             <img src="{{ asset('images/logo.png') }}" alt="An Tâm Pharmacy">
         </a>
-        <div class="header-search" role="search">
+        <form class="header-search" role="search" action="{{ route('products.index') }}" method="GET">
             <img src="{{ asset('images/figma/search.svg') }}" alt="" width="24" height="24">
-            <input type="search" aria-label="Tìm sản phẩm" placeholder="Tìm thuốc, sản phẩm chăm sóc sức khỏe...">
-        </div>
+            <input type="search" name="q" value="{{ request('q') }}" maxlength="100" aria-label="Tìm sản phẩm" placeholder="Tìm thuốc, sản phẩm chăm sóc sức khỏe...">
+            <button type="submit" class="search-submit">Tìm</button>
+        </form>
         <div class="header-actions">
             @auth
             <a class="header-action header-account header-account--signed-in @if (request()->routeIs('account.*')) is-active @endif" href="{{ route(auth()->user()->isAdmin() ? 'admin.dashboard' : 'account.index') }}" aria-label="Tài khoản {{ auth()->user()->username }}">
@@ -17,8 +18,8 @@
                 <img src="{{ asset('images/figma/user.svg') }}" alt="" width="24" height="24"><span>Đăng nhập</span>
             </a>
             @endauth
-            <a class="header-action header-cart @if (request()->routeIs('cart.*', 'checkout.*')) is-active @endif" href="{{ route('cart.index') }}" aria-label="Giỏ hàng, {{ $cartQuantity }} sản phẩm">
-                <img src="{{ asset('images/figma/bag.svg') }}" alt="" width="24" height="24"> <span class="header-cart-label">Giỏ hàng</span><span class="header-cart-count">{{ $cartQuantity }}</span>
+            <a class="header-action header-cart @if (request()->routeIs('cart.*', 'checkout.*')) is-active @endif" href="{{ route('cart.index') }}" aria-label="Giỏ hàng, {{ $cartQuantity }} sản phẩm" data-cart-link>
+                <img src="{{ asset('images/figma/bag.svg') }}" alt="" width="24" height="24"> <span class="header-cart-label">Giỏ hàng</span><span class="header-cart-count" data-cart-count>{{ $cartQuantity }}</span>
             </a>
             @auth
             <form method="POST" action="{{ route('logout') }}">
@@ -40,7 +41,7 @@
                     @endforeach
                 </ul>
             </li>
-            <li><a href="{{ route('home') }}#goc-suc-khoe">Tin tức sức khỏe</a></li>
+            <li><a href="{{ route('posts.index') }}">Tin tức sức khỏe</a></li>
             <li><a href="{{ route('home') }}#lien-he">Liên hệ</a></li>
         </ul>
     </nav>

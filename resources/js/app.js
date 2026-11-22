@@ -1,4 +1,29 @@
 import './bootstrap';
+import './shopping';
+
+document.querySelectorAll('[data-confirm]').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+        if (!window.confirm(form.dataset.confirm)) event.preventDefault();
+    });
+});
+
+document.querySelectorAll('[data-checkout]').forEach((form) => {
+    const promotion = form.querySelector('[data-promotion]');
+    const format = (amount) => new Intl.NumberFormat('vi-VN').format(amount) + 'đ';
+    const update = () => {
+        const subtotal = Number(form.dataset.subtotal);
+        const discount = Math.floor(subtotal * Number(promotion.selectedOptions[0]?.dataset.percent || 0) / 100);
+        form.querySelector('[data-discount]').textContent = format(discount);
+        form.querySelector('[data-total]').textContent = format(subtotal - discount + Number(form.dataset.shipping));
+    };
+    promotion.addEventListener('change', update);
+    update();
+    form.addEventListener('submit', () => {
+        const button = form.querySelector('[data-place-order]');
+        button.disabled = true;
+        button.textContent = 'Đang lưu đơn hàng…';
+    });
+});
 
 document.querySelectorAll('[data-category-menu]').forEach((root) => {
     const trigger = root.querySelector('.header-category-trigger');

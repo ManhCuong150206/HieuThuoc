@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AccountController extends Controller
@@ -16,8 +18,10 @@ class AccountController extends Controller
         $orders = DB::table('orders')->where('user_id', $profile?->id)
             ->orderByDesc('created_at')->orderByDesc('id')->paginate(10, ['*'], 'orders_page')
             ->fragment('don-hang');
-        $orderItems = DB::table('order_items')->whereIn('order_id', $orders->pluck('id'))
-            ->orderBy('id')->get()->groupBy('order_id');
+        $orderItems = DB::table('order_items')->leftJoin('reviews', 'reviews.order_item_id', '=', 'order_items.id')
+            ->whereIn('order_items.order_id', $orders->pluck('id'))
+            ->select('order_items.*', 'reviews.id as review_id', 'reviews.status as review_status')
+            ->orderBy('order_items.id')->get()->groupBy('order_id');
 
         return view('pages.account.index', [
             'profile' => $profile,
@@ -62,5 +66,25 @@ class AccountController extends Controller
 
         return redirect()->to(route('account.index').'#thong-tin-ca-nhan')
             ->with('status', 'Đã lưu thông tin cá nhân thành công.');
+    }
+
+    public function password(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'max:72', 'confirmed'],
+        ]);
+        $account = $request->user();
+        $valid = password_get_info($account->password)['algoName'] !== 'unknown'
+            ? password_verify($data['current_password'], $account->password)
+            : hash_equals($account->password, $data['current_password']);
+        if (! $valid) {
+            throw ValidationException::withMessages(['current_password' => 'Mật khẩu hiện tại không đúng.']);
+        }
+        $account->password = Hash::make($data['password']);
+        $account->save();
+        $request->session()->regenerate();
+
+        return back()->with('status', 'Đã đổi mật khẩu.');
     }
 }

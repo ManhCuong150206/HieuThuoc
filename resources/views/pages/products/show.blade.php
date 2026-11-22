@@ -17,6 +17,19 @@
             @if ($product->expiry_date)<p>Hạn sử dụng: {{ $product->expiry_date->format('d/m/Y') }}</p>@endif
             @if ($product->used_for)<p>{{ $product->used_for }}</p>@endif
             <x-button variant="outline" :href="route('categories.show', $category)">Xem sản phẩm cùng danh mục</x-button>
+            @php($canBuy = $product->quantity > 0 && $product->price > 0 && (!$product->expiry_date || $product->expiry_date->gte(today())))
+            @if ($canBuy)
+                <form method="POST" action="{{ route('cart.store', $product) }}" class="purchase-form" data-ajax-action="cart">
+                    @csrf
+                    <label for="buy-quantity">Số lượng</label>
+                    <input id="buy-quantity" name="quantity" type="number" min="1" max="{{ min(999, $product->quantity) }}" value="1" required>
+                    <x-button type="submit">Thêm vào giỏ</x-button>
+                    <x-button type="submit" name="buy_now" value="1" variant="outline">Mua ngay</x-button>
+                </form>
+            @else
+                <p class="checkout-note">Sản phẩm hiện chưa thể đặt mua. Vui lòng chọn sản phẩm khác.</p>
+            @endif
+            <form method="POST" action="{{ route('favorites.store', $product) }}" data-ajax-action="favorite" data-product-id="{{ $product->id }}">@csrf<x-button type="submit" variant="soft">Lưu yêu thích</x-button></form>
         </div>
     </section>
     <section class="product-information" aria-labelledby="product-information-title">
@@ -26,6 +39,13 @@
         @empty
             <p>Thông tin chi tiết đang được cập nhật.</p>
         @endforelse
+    </section>
+    <section class="checkout-panel" id="danh-gia">
+        <h2>Đánh giá từ khách hàng</h2>
+        @forelse ($reviews as $review)
+            <article class="review-entry"><strong>{{ $review->rating }}/5 — {{ $review->orderItem?->order?->user?->full_name ?? 'Khách hàng' }}</strong><p>{{ $review->comment }}</p></article>
+        @empty<p>Chưa có đánh giá được duyệt.</p>@endforelse
+        <x-pagination :paginator="$reviews" />
     </section>
     @if ($relatedProducts->isNotEmpty())
         <x-section-title title="Sản phẩm cùng danh mục" />

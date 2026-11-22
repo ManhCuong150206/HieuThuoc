@@ -3,9 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Account;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class AccountTest extends TestCase
@@ -14,44 +12,7 @@ class AccountTest extends TestCase
     {
         parent::setUp();
 
-        Schema::create('accounts', function (Blueprint $table): void {
-            $table->id();
-            $table->string('username');
-            $table->string('password');
-            $table->string('role');
-            $table->boolean('is_active')->default(true);
-        });
-        Schema::create('users', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('account_id')->unique()->constrained('accounts');
-            $table->string('full_name', 150);
-            $table->string('email', 254)->unique();
-            $table->string('phone', 20);
-            $table->string('address', 255)->nullable();
-        });
-        Schema::create('cart_items', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('user_id');
-            $table->integer('quantity');
-        });
-        Schema::create('orders', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->string('order_code');
-            $table->string('status');
-            $table->date('created_at');
-            $table->integer('total_amount');
-            $table->string('recipient_name');
-            $table->string('recipient_phone');
-            $table->string('shipping_address');
-        });
-        Schema::create('order_items', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('order_id')->constrained('orders');
-            $table->string('product_name');
-            $table->integer('unit_price');
-            $table->integer('quantity');
-        });
+        DB::table('products')->insert(['id' => 1, 'category_id' => 1, 'name' => 'Sản phẩm thử', 'price' => 10000]);
 
         DB::table('accounts')->insert([
             ['id' => 1, 'username' => 'customer1', 'password' => '123', 'role' => 'CUSTOMER'],
@@ -133,11 +94,11 @@ class AccountTest extends TestCase
         foreach ([[1, 11, 'MY-ORDER', 'PENDING'], [2, 12, 'PRIVATE-ORDER', 'SHIPPING']] as [$id, $userId, $code, $status]) {
             DB::table('orders')->insert([
                 'id' => $id, 'user_id' => $userId, 'order_code' => $code, 'status' => $status,
-                'created_at' => '2026-11-17', 'total_amount' => 20000, 'recipient_name' => 'Người nhận',
+                'subtotal' => 20000, 'payment_method' => 'COD', 'created_at' => '2026-11-17', 'total_amount' => 20000, 'recipient_name' => 'Người nhận',
                 'recipient_phone' => '0912345678', 'shipping_address' => 'Địa chỉ nhận hàng',
             ]);
             DB::table('order_items')->insert([
-                'order_id' => $id, 'product_name' => $id === 1 ? 'Sản phẩm đã mua' : 'Món hàng riêng tư',
+                'order_id' => $id, 'product_id' => 1, 'product_name' => $id === 1 ? 'Sản phẩm đã mua' : 'Món hàng riêng tư',
                 'quantity' => 2, 'unit_price' => 10000,
             ]);
         }

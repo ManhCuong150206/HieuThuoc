@@ -16,17 +16,17 @@
             <div>
                 <h2>Hỗ trợ khách hàng</h2>
                 <ul>
-                    <li>Hướng dẫn đặt hàng</li>
-                    <li>Vận chuyển &amp; đổi trả</li>
-                    <li>Chính sách bảo mật</li>
+                    <li><a href="{{ route('help') }}#dat-hang">Hướng dẫn đặt hàng</a></li>
+                    <li><a href="{{ route('help') }}#van-chuyen">Vận chuyển &amp; đổi trả</a></li>
+                    <li><a href="{{ route('help') }}#bao-mat">Thông tin cá nhân</a></li>
                 </ul>
             </div>
             <div>
                 <h2>Tài khoản</h2>
                 <ul>
                     <li><a href="{{ route('account.index') }}#don-hang">Đơn hàng của tôi</a></li>
-                    <li>Sổ địa chỉ</li>
-                    <li>Sản phẩm yêu thích</li>
+                    <li><a href="{{ route('account.index') }}#profile-address">Địa chỉ giao hàng</a></li>
+                    <li><a href="{{ route('favorites.index') }}">Sản phẩm yêu thích</a></li>
                 </ul>
             </div>
         </div>

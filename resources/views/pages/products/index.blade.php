@@ -18,6 +18,7 @@
             <div class="catalog-sort">
                 <p>{{ $products->total() }} sản phẩm</p>
                 <form class="catalog-sort-form" method="GET" action="{{ $category ? route('categories.show', $category) : route('products.index') }}">
+                    @if ($search)<input type="hidden" name="q" value="{{ $search }}">@endif
                     <label for="catalog-sort">Sắp xếp</label>
                     <select id="catalog-sort" name="sort">
                         <option value="name" @selected($sort === 'name')>Tên A–Z</option>

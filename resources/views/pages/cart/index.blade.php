@@ -16,27 +16,39 @@
                 <h2>Sản phẩm trong giỏ ({{ $quantity }})</h2>
                 @foreach ($items as $item)
                     <article class="cart-row">
-                        <div class="cart-art">
-                            @if ($item->image_url)
-                                <img src="{{ $item->image_url }}" alt="{{ $item->name }}" width="72" height="72" style="max-height: 72px; object-fit: contain;">
-                            @else
-                                <x-icon name="admin-bag" :size="32" />
-                            @endif
-                        </div>
+                        <a href="{{ route('products.show', $item->product_id) }}" class="cart-art">
+                            @if ($item->image_url)<img src="{{ $item->image_url }}" alt="{{ $item->name }}" width="72" height="72">
+                            @else<x-icon name="admin-bag" :size="32" />@endif
+                        </a>
                         <div class="cart-copy">
-                            <h3>{{ $item->name }}</h3>
+                            <h3><a href="{{ route('products.show', $item->product_id) }}">{{ $item->name }}</a></h3>
                             @if ($item->brand)<p>{{ $item->brand }}</p>@endif
                             <p>Đơn giá: {{ number_format($item->price, 0, ',', '.') }}đ</p>
+                            <p>Số lượng: {{ $item->quantity }}</p>
+                            @if (!$item->is_active || $item->price <= 0 || $item->stock < $item->quantity || ($item->expiry_date && \Illuminate\Support\Carbon::parse($item->expiry_date)->lt(today())))
+                                <p class="auth-field-error">Sản phẩm không đủ điều kiện đặt hàng. Vui lòng cập nhật hoặc xóa.</p>
+                            @endif
                         </div>
-                        <p class="cart-quantity">Số lượng: {{ $item->quantity }}</p>
-                        <p class="cart-price">{{ number_format($item->price * $item->quantity, 0, ',', '.') }}đ</p>
+                        <div class="cart-quantity">
+                            <form method="POST" action="{{ route('cart.update', $item->id) }}" class="quantity-form">
+                                @csrf @method('PUT')
+                                <label class="sr-only" for="quantity-{{ $item->id }}">Số lượng {{ $item->name }}</label>
+                                <input id="quantity-{{ $item->id }}" name="quantity" type="number" min="1" max="999" value="{{ $item->quantity }}" required>
+                                <button type="submit" class="text-action">Cập nhật</button>
+                            </form>
+                            <form method="POST" action="{{ route('cart.destroy', $item->id) }}">@csrf @method('DELETE')<button class="text-action" type="submit">Xóa</button></form>
+                        </div>
+                        <p class="cart-price">{{ number_format(round($item->price) * $item->quantity, 0, ',', '.') }}đ</p>
                     </article>
                 @endforeach
+                <form method="POST" action="{{ route('cart.clear') }}">@csrf @method('DELETE')<x-button type="submit" variant="outline">Xóa toàn bộ giỏ</x-button></form>
             </section>
             <aside class="checkout-panel checkout-summary">
                 <h2>Tóm tắt giỏ hàng</h2>
                 <dl class="summary-list"><div><dt>Số lượng sản phẩm</dt><dd>{{ $quantity }}</dd></div></dl>
                 <dl class="summary-total"><dt>Tạm tính</dt><dd>{{ number_format($subtotal, 0, ',', '.') }}đ</dd></dl>
+                <p class="checkout-note">Phí giao hàng và ưu đãi được tính tại bước thanh toán.</p>
+                <x-button :href="route('checkout.index')">Tiến hành đặt hàng</x-button>
                 <x-button variant="outline" :href="route('products.index')">Tiếp tục mua sắm</x-button>
             </aside>
         </div>

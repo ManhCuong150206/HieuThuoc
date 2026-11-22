@@ -2,10 +2,8 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class RegisterTest extends TestCase
@@ -14,28 +12,6 @@ class RegisterTest extends TestCase
     {
         parent::setUp();
 
-        Schema::create('accounts', function (Blueprint $table): void {
-            $table->id();
-            $table->string('username', 50)->unique();
-            $table->string('password');
-            $table->string('role', 10)->default('CUSTOMER');
-            $table->boolean('is_active')->default(true);
-            $table->date('created_at');
-        });
-        Schema::create('users', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('account_id')->unique()->constrained('accounts');
-            $table->string('full_name', 150);
-            $table->string('email', 254)->unique();
-            $table->string('phone', 20);
-            $table->string('address')->nullable();
-        });
-        Schema::create('cart_items', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('product_id');
-            $table->integer('quantity');
-        });
     }
 
     private function registrationData(array $overrides = []): array
