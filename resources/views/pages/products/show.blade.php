@@ -2,12 +2,14 @@
 @section('title', $product->name)
 @section('content')
 <div class="site-container page-stack">
-    <x-breadcrumb :items="[['label' => $category->name, 'href' => route('categories.show', $category)], ['label' => $product->name]]" />
+    <header class="page-title">
+        <div class="section-title"><h1>{{ $product->name }}</h1></div>
+        <x-breadcrumb :items="[['label' => $category->name, 'href' => route('categories.show', $category)], ['label' => $product->name]]" />
+    </header>
     <section class="product-detail">
         <div class="product-gallery"><div class="gallery-main"><x-product-image :product="$product" loading="eager" /></div></div>
         <div class="product-detail-copy">
             <x-badge>{{ $category->name }}</x-badge>
-            <h1>{{ $product->name }}</h1>
             <p class="detail-meta">Mã sản phẩm: {{ $product->id }}@if ($product->brand) · {{ $product->brand }}@endif</p>
             <div class="detail-price-row">
                 <p class="detail-price">{{ number_format($product->price, 0, ',', '.') }}đ</p>

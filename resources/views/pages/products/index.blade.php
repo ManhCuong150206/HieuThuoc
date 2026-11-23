@@ -2,8 +2,10 @@
 @section('title', $category?->name ?? 'Danh mục sản phẩm')
 @section('content')
 <div class="site-container page-stack">
-    <x-breadcrumb :items="[['label' => $category?->name ?? 'Danh mục sản phẩm']]" />
-    <x-section-title :title="$category?->name ?? 'Tất cả sản phẩm'" description="Khám phá các sản phẩm chăm sóc sức khỏe tại An Tâm." :level="1" />
+    <header class="page-title">
+        <x-section-title :title="$category?->name ?? 'Tất cả sản phẩm'" description="Khám phá các sản phẩm chăm sóc sức khỏe tại An Tâm." :level="1" />
+        <x-breadcrumb :items="[['label' => $category?->name ?? 'Danh mục sản phẩm']]" />
+    </header>
     <div class="catalog-layout">
         <aside class="catalog-filters" aria-labelledby="filters-title">
             <h2 id="filters-title">Danh mục sản phẩm</h2>

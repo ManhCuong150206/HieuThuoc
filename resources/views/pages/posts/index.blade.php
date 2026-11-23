@@ -2,7 +2,9 @@
 @section('title', 'Tin tức sức khỏe')
 @section('content')
 <div class="site-container page-stack">
-    <x-section-title title="Tin tức sức khỏe" :level="1" />
+    <header class="page-title">
+        <x-section-title title="Tin tức sức khỏe" :level="1" />
+    </header>
     <div class="articles-grid">
         @forelse ($posts as $post)
             <article class="article-card">
