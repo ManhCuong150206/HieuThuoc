@@ -2,8 +2,10 @@
 @section('title', 'Thanh toán')
 @section('content')
 <div class="site-container page-stack">
-    <x-breadcrumb :items="[['label' => 'Giỏ hàng', 'href' => route('cart.index')], ['label' => 'Thanh toán']]" />
-    <x-section-title title="Thông tin đặt hàng" description="Kiểm tra sản phẩm và địa chỉ trước khi xác nhận." :level="1" />
+    <header class="page-title">
+        <x-section-title title="Thông tin đặt hàng" description="Kiểm tra sản phẩm và địa chỉ trước khi xác nhận." :level="1" />
+        <x-breadcrumb :items="[['label' => 'Giỏ hàng', 'href' => route('cart.index')], ['label' => 'Thanh toán']]" />
+    </header>
     <form method="POST" action="{{ route('checkout.store') }}" class="checkout-layout" data-checkout data-subtotal="{{ $subtotal }}" data-shipping="{{ $shippingFee }}">
         @csrf
         <input type="hidden" name="checkout_token" value="{{ $checkoutToken }}">

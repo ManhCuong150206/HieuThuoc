@@ -2,8 +2,10 @@
 @section('title', 'Giỏ hàng')
 @section('content')
     <div class="site-container page-stack">
-        <x-breadcrumb :items="[['label' => 'Giỏ hàng']]" />
-        <x-section-title title="Giỏ hàng của bạn" :level="1" />
+        <header class="page-title">
+            <x-section-title title="Giỏ hàng của bạn" :level="1" />
+            <x-breadcrumb :items="[['label' => 'Giỏ hàng']]" />
+        </header>
         @if ($items->isEmpty())
             <section class="checkout-panel">
                 <h2>Giỏ hàng của bạn đang trống</h2>

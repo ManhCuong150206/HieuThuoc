@@ -2,7 +2,9 @@
 @section('title', 'Sản phẩm yêu thích')
 @section('content')
 <div class="site-container page-stack">
-    <x-section-title title="Sản phẩm yêu thích" :level="1" />
+    <header class="page-title">
+        <x-section-title title="Sản phẩm yêu thích" :level="1" />
+    </header>
     @if ($products && $products->isNotEmpty())
         <div class="product-grid">
             @foreach ($products as $product)

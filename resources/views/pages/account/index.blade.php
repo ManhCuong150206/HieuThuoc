@@ -2,8 +2,10 @@
 @section('title', 'Tài khoản của tôi')
 @section('content')
 <div class="site-container page-stack">
-    <x-breadcrumb :items="[['label' => 'Tài khoản của tôi']]" />
-    <x-section-title eyebrow="TÀI KHOẢN CỦA TÔI" :title="'Xin chào, '.($profile?->full_name ?: $account->username)" description="Quản lý thông tin và theo dõi đơn hàng của bạn." :level="1" />
+    <header class="page-title">
+        <x-section-title eyebrow="TÀI KHOẢN CỦA TÔI" :title="'Xin chào, '.($profile?->full_name ?: $account->username)" description="Quản lý thông tin và theo dõi đơn hàng của bạn." :level="1" />
+        <x-breadcrumb :items="[['label' => 'Tài khoản của tôi']]" />
+    </header>
     <div class="account-layout">
         <aside class="account-nav" aria-label="Điều hướng tài khoản">
             <div class="account-avatar"><x-icon name="account-user" :size="40" /></div>
