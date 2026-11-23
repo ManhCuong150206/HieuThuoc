@@ -72,8 +72,8 @@
 .home-band-side p { max-width: 44ch; font-size: 18px; }
 .home-band-photo { margin-top: 12px; }
 .home-band .link { color: var(--color-paper); }
-.order-steps { display: grid; margin-top: 40px; border-top: 1px solid rgb(245 243 238 / 22%); }
-.order-steps li { display: grid; grid-template-columns: 48px 1fr; align-items: baseline; gap: 16px; padding-block: 18px; border-bottom: 1px solid rgb(245 243 238 / 22%); }
+.order-steps { display: grid; margin-top: 40px; border-top: 1px solid color-mix(in srgb, var(--color-paper) 22%, transparent); }
+.order-steps li { display: grid; grid-template-columns: 48px 1fr; align-items: baseline; gap: 16px; padding-block: 18px; border-bottom: 1px solid color-mix(in srgb, var(--color-paper) 22%, transparent); }
 .order-steps-no { font-family: var(--font-display); font-size: 28px; line-height: 1; }
 .order-steps p { font-size: 18px; }
 @media (max-width: 1023px) {

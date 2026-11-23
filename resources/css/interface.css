@@ -15,7 +15,7 @@
 /* a dark ground (the brand band, the footer): text and hover tones flip, the one primary button keeps its green */
 .on-dark {
     --bg: var(--color-night); --ink: var(--color-paper); --muted: var(--color-night-muted);
-    --line-strong: rgb(245 243 238 / 45%);
+    --line-strong: color-mix(in srgb, var(--color-paper) 45%, transparent);
     color: var(--color-paper);
 }
 @media (max-width: 639px) {

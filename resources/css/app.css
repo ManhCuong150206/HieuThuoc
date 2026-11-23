@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './colors.css';
 @import './fonts.css';
 @import './storefront.css';
 @import './interface.css';
@@ -12,40 +13,18 @@
 
 /*
   Design tokens: the one place for colour, type, radius and shadow.
-  Palette from the logo's own green (#3f6d56) on a warm paper ground, like a pharmacy's paper bag;
+  Palette from the logo's own green on a warm paper ground, like a pharmacy's paper bag;
   display face Bricolage Grotesque, text face Be Vietnam Pro (both carry every Vietnamese mark).
 */
 @theme static {
     --font-display: 'Bricolage Grotesque', 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
     --font-sans: 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
 
-    --color-paper: #f5f3ee;        /* page ground */
-    --color-stone: #ebe7df;        /* second ground, picture frames */
-    --color-surface: #ffffff;      /* cards, fields, panels */
-    --color-ink: #1d2420;          /* text, 15:1 on paper */
-    --color-muted: #5b605c;        /* labels and meta, 5.9:1 on paper */
-    --color-line: #dad6cd;         /* hairlines */
-    --color-line-strong: #b9b4a9;  /* field and secondary-button borders */
-    --color-brand: #3f6d56;        /* the logo green: primary button, links, focus */
-    --color-dark: #2e5442;         /* the brand band, 7.4:1 under paper text */
-    --color-pale: #e3eae4;         /* soft brand tint for badges and states */
-    --color-night: #1d2420;        /* footer ground */
-    --color-night-muted: #a9ada7;  /* footer labels, 7.6:1 on night */
-    --color-danger: #a3332b;       /* errors */
-    --color-warm: #f4ecdc;
-    --color-info: #e8eef2;
-    --color-lime: #e3eae4;
-    --color-orange: #8a5a1c;
-    --color-field: #b9b4a9;
-    --color-hover: #1d2420;
-    --color-hover-border: #1d2420;
-
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
     --radius-btn: 10px;
 
-    --shadow-panel: 0 14px 32px -18px rgb(29 36 32 / 35%);
 }
 
 /* Layout rhythm and the names the motion layer (public/assets/motion) reads; all values come from @theme. */

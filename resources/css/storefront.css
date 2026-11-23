@@ -219,7 +219,7 @@ html.nav-locked, html.nav-locked body { overflow: hidden; }
 .footer-col a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 8px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform var(--m-out, 120ms) var(--ease); }
 .footer-col a:hover::after, .footer-col a:focus-visible::after { transform: scaleX(1); transition-duration: var(--m-in, 150ms); }
 .footer-col .footer-plain { color: var(--color-night-muted); }
-.footer-legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-top: 24px; border-top: 1px solid rgb(245 243 238 / 14%); color: var(--color-night-muted); font-size: 14px; }
+.footer-legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-top: 24px; border-top: 1px solid color-mix(in srgb, var(--color-paper) 14%, transparent); color: var(--color-night-muted); font-size: 14px; }
 
 @media (max-width: 1023px) {
     .footer-about, .footer-links { grid-column: 1 / -1; }
