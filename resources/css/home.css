@@ -4,8 +4,8 @@
     background: linear-gradient(110deg, var(--color-pale), var(--color-paper));
 }
 .hero--intro > .wrap { display: grid; gap: 20px; }
-.hero--intro h1 { max-width: 17ch; font-size: clamp(38px, 5vw, 72px); line-height: 1.07; }
-.hero--intro h1 span { color: var(--color-brand); }
+.hero--intro h1 { max-width: 22ch; font-size: clamp(38px, 5vw, 72px); line-height: 1.07; }
+.hero-highlight { display: block; color: var(--color-brand); }
 .hero--intro .hero__lead { max-width: 55ch; font-size: clamp(16px, 1.5vw, 20px); }
 .home-section { padding-block: clamp(44px, 6vw, 88px); }
 .home-section:nth-of-type(even) { background: var(--color-surface); }

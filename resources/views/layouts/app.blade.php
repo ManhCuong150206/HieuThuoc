@@ -8,7 +8,7 @@
     <meta name="description" content="@yield('description', 'An Tâm Pharmacy bán thuốc không kê đơn, vitamin và đồ chăm sóc cá nhân trực tuyến, giao tận nhà với phí 25.000đ mỗi đơn.')">
     <meta name="page-type" content="product">
     <meta name="site-kind" content="other">
-    <meta name="theme-color" content="#f5f3ee">
+    <meta name="theme-color">
     <meta property="og:type" content="website">
     <meta property="og:title" content="@yield('title', 'Nhà thuốc trực tuyến') | An Tâm Pharmacy">
     <meta property="og:description" content="@yield('description', 'An Tâm Pharmacy bán thuốc không kê đơn, vitamin và đồ chăm sóc cá nhân trực tuyến, giao tận nhà với phí 25.000đ mỗi đơn.')">
@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{ asset('assets/motion/motion.css') }}">
     @stack('styles')
     <script>
+        document.querySelector('meta[name="theme-color"]').content = getComputedStyle(document.documentElement).getPropertyValue('--color-paper').trim();
         document.documentElement.classList.add('m-enter', 'mo-js');
         setTimeout(() => document.documentElement.classList.add('m-enter-done'), 700);
         setTimeout(() => document.documentElement.classList.add('mo-safe'), 2500)
@@ -27,7 +28,6 @@
 </head>
 
 <body class="@yield('body-class', 'storefront')">
-    {{-- deal: kind product (online pharmacy) · palette from the logo green on paper · Bricolage Grotesque + Be Vietnam Pro · radius soft · hero product · nav-mega · footer-dark · close-word head row · rhythm brand-band · buttons solid · moment picture-develops --}}
     @unless (request()->routeIs('admin.*'))
         @include('partials.header')
     @endunless

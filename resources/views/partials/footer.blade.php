@@ -42,10 +42,9 @@ closing
         </div>
     </div>
     <div class="footer-bottom">
-            <div class="site-container footer-legal">
-                <p>© {{ now()->year }} An Tâm Pharmacy</p>
-                <p>Địa chỉ, hotline và giấy phép: cập nhật khi triển khai</p>
-
-            </div>
+        <div class="site-container footer-legal">
+            <p>© {{ now()->year }} An Tâm Pharmacy</p>
+            <p>Địa chỉ, hotline và giấy phép: cập nhật khi triển khai</p>
+        </div>
     </div>
 </footer>

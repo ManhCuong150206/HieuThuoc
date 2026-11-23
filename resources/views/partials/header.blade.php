@@ -12,8 +12,7 @@
         </a>
         <div class="header-drawer" id="header-drawer">
             <form class="header-search" role="search" action="{{ route('products.index') }}" method="GET">
-                <label for="header-search-sheet"><img src="{{ asset('images/figma/search.svg') }}" alt=""
-                        width="20" height="20">Tìm</label>
+                <label for="header-search-sheet"><x-icon name="search" :size="20" />Tìm</label>
                 <input id="header-search-sheet" type="search" name="q" value="{{ request('q') }}"
                     maxlength="100" placeholder="Tìm thuốc, vitamin, đồ chăm sóc…">
                 <button type="submit" class="search-submit">Tìm kiếm</button>
@@ -69,8 +68,7 @@
             </div>
         </div>
         <form class="header-search" role="search" action="{{ route('products.index') }}" method="GET">
-            <label for="header-search-bar"><img src="{{ asset('images/figma/search.svg') }}" alt=""
-                    width="20" height="20">Tìm</label>
+            <label for="header-search-bar"><x-icon name="search" :size="20" />Tìm</label>
             <input id="header-search-bar" type="search" name="q" value="{{ request('q') }}" maxlength="100"
                 placeholder="Tìm thuốc, vitamin, đồ chăm sóc…">
             <button type="submit" class="search-submit">Tìm kiếm</button>
@@ -80,19 +78,17 @@
                 <a class="header-action header-account header-account--signed-in @if (request()->routeIs('account.*')) is-active @endif"
                     href="{{ route(auth()->user()->isAdmin() ? 'admin.dashboard' : 'account.index') }}"
                     aria-label="Tài khoản {{ auth()->user()->username }}">
-                    <img src="{{ asset('images/figma/user.svg') }}" alt="" width="24"
-                        height="24"><span>{{ auth()->user()->username }}</span>
+                    <x-icon name="user" :size="24" /><span>{{ auth()->user()->username }}</span>
                 </a>
             @else
                 <a class="header-action header-account @if (request()->routeIs('login', 'register')) is-active @endif"
                     href="{{ route('login') }}" aria-label="Đăng nhập">
-                    <img src="{{ asset('images/figma/user.svg') }}" alt="" width="24"
-                        height="24"><span>Đăng nhập</span>
+                    <x-icon name="user" :size="24" /><span>Đăng nhập</span>
                 </a>
             @endauth
             <a class="header-action header-cart @if (request()->routeIs('cart.*', 'checkout.*')) is-active @endif"
                 href="{{ route('cart.index') }}" aria-label="Giỏ hàng, {{ $cartQuantity }} sản phẩm" data-cart-link>
-                <img src="{{ asset('images/figma/bag.svg') }}" alt="" width="24" height="24"> <span
+                <x-icon name="bag" :size="24" /> <span
                     class="header-cart-label">Giỏ hàng</span><span class="header-cart-count"
                     data-cart-count>{{ $cartQuantity }}</span>
             </a>
