@@ -1,6 +1,12 @@
 <header class="site-header nav" data-site-header>
+    <a class="skip-link" href="#main-content">Bỏ qua, đến nội dung chính</a>
+    <div class="clinic-topbar">
+        <div class="site-container">
+            <span>Giao tận nhà · Phí giao 25.000đ mỗi đơn</span>
+            <a href="{{ route('help') }}#van-chuyen">Thông tin vận chuyển</a>
+        </div>
+    </div>
     <div class="site-container wrap header-main">
-        <a class="skip-link" href="#main-content">Bỏ qua, đến nội dung chính</a>
         <a class="header-logo" href="{{ route('home') }}" aria-label="An Tâm Pharmacy — Trang chủ">
             <img src="{{ asset('images/logo-mark.png') }}" alt="An Tâm Pharmacy" width="242" height="97">
         </a>

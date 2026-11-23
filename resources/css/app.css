@@ -29,7 +29,8 @@
 
 /* Layout rhythm and the names the motion layer (public/assets/motion) reads; all values come from @theme. */
 :root {
-    --nav: 72px;
+    --topbar: 36px;
+    --nav: calc(72px + var(--topbar));
     --padt: 120px;
     --padb: 72px;
     --hgap: 48px;
@@ -66,7 +67,8 @@
 
 @media (max-width: 639px) {
     :root {
-        --nav: 56px;
+        --topbar: 30px;
+        --nav: calc(56px + var(--topbar));
         --padt: 96px;
         --padb: 48px;
         --hgap: 40px;

@@ -3,7 +3,7 @@
 @section('content')
 <div class="admin-layout">
     <aside class="admin-sidebar">
-        <a class="admin-brand-link" href="{{ route('admin.dashboard') }}">An Tâm Pharmacy</a>
+        <div class="admin-branding"><a class="admin-brand-link" href="{{ route('admin.dashboard') }}">An Tâm Pharmacy</a></div>
         <nav aria-label="Điều hướng quản trị"><ul>
             <li><a href="{{ route('admin.dashboard') }}" @if(request()->routeIs('admin.dashboard')) aria-current="page" @endif>Tổng quan</a></li>
             <li><a href="{{ route('admin.orders.index') }}" @if(request()->routeIs('admin.orders.*')) aria-current="page" @endif>Đơn hàng</a></li>

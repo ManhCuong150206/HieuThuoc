@@ -114,9 +114,7 @@
 @media (max-width: 1023px) { .home-articles { grid-template-columns: 1fr; } }
 
 /* ---------------------------------------------------------------- the close and the directory: one screen on the home page */
-.site-footer.closing { display: flex; padding-block: var(--padt) var(--padb); }
-@media (min-width: 1024px) { .site-footer.closing { height: 100svh; } }
-@media (max-width: 1023px) { .site-footer.closing { min-height: 100lvh; } }
+.site-footer.closing { padding-block: 64px 32px; }
 .site-footer.closing > .wrap { display: flex; flex-direction: column; justify-content: space-between; gap: 64px; }
 .footer-close-row { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: start; }
 .footer-close-row > div { grid-column: 1 / span 7; display: grid; gap: 20px; }

@@ -1,12 +1,12 @@
 /* Base, page frame, header and footer. Tokens: app.css. */
 :root {
     --site-width: 1280px;
-    --gutter: 80px;
+    --gutter: clamp(24px, 4vw, 64px);
 }
 @media (max-width: 1023px) { :root { --gutter: 48px; } }
 @media (max-width: 639px) { :root { --gutter: 24px; } }
 
-html { scroll-padding-top: 0; scroll-behavior: auto; -webkit-text-size-adjust: 100%; }
+html { scroll-padding-top: calc(var(--nav) + 12px); scroll-behavior: auto; -webkit-text-size-adjust: 100%; }
 body {
     background: var(--color-paper);
     color: var(--color-ink);
@@ -53,10 +53,18 @@ body.home .feedback-message { margin-top: calc(var(--nav) + 16px); }
 .site-header {
     position: fixed; inset: 0 0 auto; z-index: 20;
     height: var(--nav);
-    background: var(--color-paper);
+    background: var(--color-surface);
     border-bottom: 1px solid var(--color-line);
 }
-.header-main { display: flex; align-items: center; gap: 24px; height: 100%; }
+.clinic-topbar { height: var(--topbar); background: var(--color-dark); color: var(--color-surface); font-size: 13px; }
+.clinic-topbar .site-container { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+.clinic-topbar a { text-decoration: underline; text-underline-offset: 3px; }
+.clinic-topbar :focus-visible { outline-color: currentColor; }
+@media (max-width: 639px) {
+    .clinic-topbar .site-container { justify-content: center; }
+    .clinic-topbar a { display: none; }
+}
+.header-main { display: flex; align-items: center; gap: clamp(10px, 1.5vw, 24px); height: calc(100% - var(--topbar)); }
 .header-logo { display: flex; flex: 0 0 auto; align-items: center; min-height: 48px; }
 .header-logo img { display: block; width: auto; height: 44px; }
 
@@ -207,8 +215,8 @@ html.nav-locked, html.nav-locked body { overflow: hidden; }
 .site-footer :focus-visible { outline-color: var(--color-paper); }
 .footer-directory { display: grid; gap: 48px; }
 .footer-columns { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
-.footer-about { grid-column: 1 / span 7; display: grid; align-content: start; gap: 16px; }
-.footer-links { grid-column: 8 / span 5; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; font-size: 15px; }
+.footer-about { grid-column: 1 / span 4; display: grid; align-content: start; gap: 16px; }
+.footer-links { grid-column: 6 / span 7; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; font-size: 15px; }
 .footer-name { font-family: var(--font-display); font-size: clamp(36px, 3.4vw, 48px); line-height: 1.05; letter-spacing: -0.03em; }
 .footer-about p { max-width: 36ch; color: var(--color-night-muted); }
 
@@ -229,3 +237,5 @@ html.nav-locked, html.nav-locked body { overflow: hidden; }
     .footer-links { grid-template-columns: 1fr 1fr; gap: 16px 12px; }
     .footer-links .footer-col:last-child { grid-column: 1 / -1; }
 }
+
+.footer-bottom { margin-top: 48px; }
