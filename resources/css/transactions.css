@@ -14,6 +14,7 @@
 }
 .ajax-feedback[hidden] { display: none; }
 .ajax-feedback[data-state="error"] { border-color: var(--color-orange); }
+.ajax-feedback { border-inline-start-width: 4px; }
 .ajax-feedback-close { flex: none; min-width: 32px; min-height: 32px; cursor: pointer; font-size: 24px; line-height: 1; }
 .ajax-feedback .text-action { display: inline-block; margin-top: 8px; }
 .feedback-error { background: var(--color-warm); color: var(--color-ink); border: 1px solid var(--color-line); }

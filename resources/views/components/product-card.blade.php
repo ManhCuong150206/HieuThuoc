@@ -3,6 +3,7 @@
     <div class="product-card-art m-zoom">
         <x-product-image :product="$product" />
     </div>
+    <x-badge :variant="$product->quantity > 0 ? 'pale' : 'muted'">{{ $product->quantity > 0 ? 'Còn hàng' : 'Hết hàng' }}</x-badge>
     <div class="product-card-body">
         <div class="product-card-copy">
             <h3><a href="{{ route('products.show', $product) }}">{{ $product->name }}</a></h3>
@@ -11,7 +12,6 @@
                 @endif
             </p>
         </div>
-        <x-badge :variant="$product->quantity > 0 ? 'pale' : 'muted'">{{ $product->quantity > 0 ? 'Còn hàng' : 'Hết hàng' }}</x-badge>
         <p class="product-price">{{ number_format($product->price, 0, ',', '.') }}đ</p>
         @if (
             $product->is_active &&

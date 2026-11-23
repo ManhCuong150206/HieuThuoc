@@ -4,12 +4,13 @@
 .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 10px;
     min-height: 48px; padding: 0 24px;
-    border: 1px solid transparent; border-radius: var(--radius-btn);
+    border: 1px solid transparent; border-radius: 100px;
     font-family: var(--font-sans); font-size: 16px; font-weight: 500; line-height: 1.25; text-align: center;
     white-space: nowrap; cursor: pointer;
 }
 .btn--primary { background: var(--action); color: var(--action-ink); }
-.btn--secondary { background: transparent; border-color: var(--line-strong); color: var(--ink); }
+.btn--secondary { background: transparent; border-color: currentColor; color: var(--color-brand); }
+.on-dark .btn--secondary { color: var(--color-paper); }
 .btn:disabled, .btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
 .btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
 /* a dark ground (the brand band, the footer): text and hover tones flip, the one primary button keeps its green */
@@ -58,7 +59,7 @@
 .ui-field label { font-weight: 500; }
 .ui-field input, .ui-field select, .ui-field textarea {
     width: 100%; min-height: 48px; padding: 10px 14px;
-    border: 1px solid var(--color-line-strong); border-radius: var(--radius-sm);
+    border: 1px solid var(--color-muted); border-radius: var(--radius-sm);
     background: var(--color-surface); color: var(--color-ink); font-size: 16px;
     transition: border-color 140ms var(--ease), box-shadow 140ms var(--ease);
 }
@@ -75,6 +76,7 @@
 .product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
 .product-card {
     position: relative; display: flex; min-width: 0; flex-direction: column;
+    box-shadow: var(--shadow-panel);
     background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-lg);
     overflow: hidden;
 }
@@ -85,7 +87,7 @@
 .product-card-art img { width: 100%; height: 100%; object-fit: contain; }
 .product-card-art .product-image-fallback { color: var(--color-muted); font-size: 14px; text-align: center; }
 .product-card-body { display: flex; flex: 1; flex-direction: column; gap: 8px; padding: 20px 20px 24px; }
-.product-card .badge { order: -1; }
+.product-card > .badge { align-self: flex-start; margin: -13px 16px 0; position: relative; }
 .product-card-copy h3 { font-family: var(--font-sans); font-size: 17px; font-weight: 500; line-height: 1.4; letter-spacing: 0; }
 .product-card-copy h3 a::after { content: ''; position: absolute; inset: 0; z-index: 1; }
 .product-card-copy p { margin-top: 4px; color: var(--color-muted); font-size: 14px; }
@@ -110,3 +112,11 @@
     .product-price { font-size: 20px; }
     .product-card .btn { padding-inline: 8px; }
 }
+
+/* Inner pages use Clinic's centered title, followed by a separate breadcrumb strip. */
+.page-title { overflow-wrap: anywhere; background: var(--color-surface); border-radius: var(--radius-lg); overflow: hidden; }
+.page-title > .section-title { padding: clamp(28px, 5vw, 64px) 20px; justify-items: center; text-align: center; }
+.page-title h1 { color: var(--color-dark); font-size: clamp(30px, 4vw, 52px); }
+.page-title .breadcrumb { padding: 10px clamp(16px, 3vw, 32px); background: var(--color-pale); }
+.page-title .breadcrumb a { color: var(--color-dark); text-decoration: underline; }
+@media (max-width: 480px) { .product-grid { grid-template-columns: minmax(0, 1fr); } }
