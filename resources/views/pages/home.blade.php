@@ -7,7 +7,7 @@
 @section('content')
     <section class="hero hero--intro" data-enter aria-labelledby="home-title">
         <div class="site-container wrap">
-            <h1 id="home-title">Nhà thuốc trực tuyến cho cả gia đình</h1>
+            <h1 id="home-title">Nhà thuốc trực tuyến <span>cho cả gia đình</span></h1>
             <p class="hero__lead">Thuốc không kê đơn, vitamin và đồ chăm sóc cá nhân, ghi rõ thành phần, cách
                 dùng và hạn sử dụng. Giao tận nhà, phí 25.000đ mỗi đơn.</p>
         </div>

@@ -1,35 +1,15 @@
-/* Home page splits share the left edge and column 8. */
-
-/* ---------------------------------------------------------------- introduction */
+/* Text-only adaptation of the Clinic introduction. */
 .hero--intro {
-    padding-top: calc(var(--nav) + var(--hgap));
-    padding-bottom: var(--hgap);
+    padding-block: calc(var(--nav) + clamp(48px, 7vw, 96px)) clamp(48px, 7vw, 96px);
+    background: linear-gradient(110deg, var(--color-pale), var(--color-paper));
 }
-.hero--intro > .wrap { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: center; }
-.hero--intro h1 {
-    grid-column: 1 / span 7;
-    font-size: clamp(40px, 2.9vw + 30px, 72px); line-height: 1.02; letter-spacing: var(--display-tracking-xl);
-}
-.hero--intro .hero__lead { grid-column: 8 / span 5; max-width: 560px; font-size: 18px; line-height: 1.6; }
-
-@media (max-width: 1023px) {
-    .hero--intro > .wrap { grid-template-columns: 1fr; }
-    .hero--intro h1, .hero--intro .hero__lead { grid-column: 1; }
-}
-@media (max-width: 639px) {
-    .hero--intro > .wrap { gap: 16px; }
-    .hero--intro h1 { font-size: 38px; line-height: 1.06; }
-    .hero--intro .hero__lead { font-size: 17px; }
-}
-
-/* ---------------------------------------------------------------- sections: exactly one screen at 1024 and up */
-.home-section { padding-block: var(--padt) calc(var(--padb) + var(--bar)); }
-@media (min-width: 1024px) {
-    .home-section { height: calc(var(--h, 1) * 100svh); }
-}
-@media (max-width: 1023px) {
-    .home-section { min-height: calc(var(--hm, var(--h, 1)) * 100lvh); }
-}
+.hero--intro > .wrap { display: grid; gap: 20px; }
+.hero--intro h1 { max-width: 17ch; font-size: clamp(38px, 5vw, 72px); line-height: 1.07; }
+.hero--intro h1 span { color: var(--color-brand); }
+.hero--intro .hero__lead { max-width: 55ch; font-size: clamp(16px, 1.5vw, 20px); }
+.home-section { padding-block: clamp(44px, 6vw, 88px); }
+.home-section:nth-of-type(even) { background: var(--color-surface); }
+.home-section.home-band { background: var(--color-dark); }
 .home-section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 48px; }
 @media (max-width: 639px) {
     .home-section-head { display: grid; justify-content: stretch; margin-bottom: 32px; }
