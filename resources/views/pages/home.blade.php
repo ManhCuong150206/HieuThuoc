@@ -1,28 +1,25 @@
 @extends('layouts.app')
 @section('title', 'Nhà thuốc trực tuyến cho cả gia đình')
 @section('body-class', 'storefront home')
-@php
-    $productTotal = $categories->sum('products_count');
-@endphp
 @section('content')
     <section class="hero hero--intro" data-enter aria-labelledby="home-title">
         <div class="site-container wrap">
+            <p class="hero-brand">An Tâm Pharmacy</p>
             <h1 id="home-title">Nhà thuốc trực tuyến <span class="hero-highlight">cho cả gia đình</span></h1>
-            <p class="hero__lead">Thuốc không kê đơn, vitamin và đồ chăm sóc cá nhân, ghi rõ thành phần, cách
-                dùng và hạn sử dụng. Giao tận nhà, phí 25.000đ mỗi đơn.</p>
+            <p class="hero__lead">Tìm thuốc, vitamin và sản phẩm chăm sóc cá nhân cho gia đình. Xem thành phần, cách dùng và đặt giao tận nhà.</p>
         </div>
     </section>
 
     <section class="home-section" id="danh-muc" aria-labelledby="danh-muc-title">
         <div class="site-container wrap home-split">
             <div class="home-split-text">
-                <x-section-title id="danh-muc-title" title="Thuốc, vitamin và dụng cụ y tế" :description="$productTotal . ' sản phẩm đang bán, chia theo ' . $categories->count() . ' danh mục.'" />
+                <x-section-title id="danh-muc-title" title="Thuốc, vitamin và dụng cụ y tế" />
                 <ul class="category-rows">
                     @foreach ($categories as $category)
                         <li>
                             <a href="{{ route('categories.show', $category) }}">
                                 <span class="category-rows-name">{{ $category->name }}</span>
-                                <span class="category-rows-count">{{ $category->products_count }} sản phẩm</span>
+
                                 <svg class="m-arrow" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
                                     <path class="m-arrow__stem" d="M3 10h13" fill="none" stroke="currentColor"
                                         stroke-width="1.5" />
@@ -41,48 +38,18 @@
         </div>
     </section>
 
-    <section class="home-section" id="san-pham-moi" aria-labelledby="san-pham-moi-title">
+    <section class="home-section" id="san-pham-ban-chay" aria-labelledby="san-pham-ban-chay-title">
         <div class="site-container wrap">
             <div class="home-section-head">
-                <x-section-title id="san-pham-moi-title" :title="$products->count() . ' sản phẩm mới về kệ'"
-                    description="Những sản phẩm vừa được thêm vào nhà thuốc, kèm giá bán và tình trạng còn hàng." />
-                <a class="link" href="{{ route('products.index') }}">Xem tất cả {{ $productTotal }} sản phẩm</a>
+                <x-section-title id="san-pham-ban-chay-title" title="Sản phẩm bán chạy" />
+                <a class="link" href="{{ route('products.index') }}">Xem tất cả sản phẩm</a>
             </div>
             <div class="product-grid">
-                @foreach ($products as $product)
+                @forelse ($bestSellers as $product)
                     <x-product-card :product="$product" />
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <section class="home-section home-band on-dark" id="dat-hang" aria-labelledby="dat-hang-title">
-        <div class="site-container wrap home-band-grid">
-            <div>
-                <x-section-title id="dat-hang-title" title="4 bước đặt thuốc giao tận nhà"
-                    description="Từ giỏ hàng đến tay bạn, theo dõi được trong tài khoản." />
-                <ol class="order-steps">
-                    <li><span class="order-steps-no">1</span>
-                        <p>Thêm sản phẩm còn hàng vào giỏ.</p>
-                    </li>
-                    <li><span class="order-steps-no">2</span>
-                        <p>Kiểm tra số lượng, điền tên, số điện thoại và địa chỉ nhận hàng.</p>
-                    </li>
-                    <li><span class="order-steps-no">3</span>
-                        <p>Chọn ưu đãi nếu có rồi xác nhận đơn.</p>
-                    </li>
-                    <li><span class="order-steps-no">4</span>
-                        <p>Hủy được trong tài khoản trước khi đơn chuyển sang Đang giao.</p>
-                    </li>
-                </ol>
-            </div>
-            <div class="home-band-side">
-                <p>Phí giao <strong>25.000đ</strong> mỗi đơn, hiện trước khi bạn xác nhận. Hiện nhận tiền mặt; thanh toán mã
-                    QR đang được bổ sung.</p>
-                <a class="link" href="{{ route('help') }}#van-chuyen">Đọc quy định giao và hủy đơn</a>
-                <figure class="frame home-band-photo"><img src="{{ asset('images/home/bao-thach.jpg') }}"
-                        alt="Gói 5 cuộn băng y tế Bảo Thạch" width="880" height="880" loading="lazy" decoding="async">
-                </figure>
+                @empty
+                    <p class="best-sellers-empty">Chưa có sản phẩm bán chạy.</p>
+                @endforelse
             </div>
         </div>
     </section>
@@ -139,7 +106,7 @@
     <div class="footer-close-row">
         <div>
             <h2>Thuốc và đồ chăm sóc sức khỏe giao tận nhà</h2>
-            <p>{{ $productTotal }} sản phẩm trong {{ $categories->count() }} danh mục. Phí giao 25.000đ mỗi đơn, trả tiền
+            <p>Phí giao 25.000đ mỗi đơn, trả tiền
                 mặt.</p>
         </div>
         <x-button :href="route('products.index')">Xem sản phẩm</x-button>

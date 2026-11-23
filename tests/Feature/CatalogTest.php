@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
@@ -28,10 +29,36 @@ class CatalogTest extends TestCase
         $this->get('/')->assertOk()->assertSee('aria-controls="header-category-list"', false)
             ->assertSee('Thuốc không kê đơn')->assertSee('Danh mục trống')
             ->assertSee('href="'.route('categories.show', 2).'"', false)
-            ->assertSee('Sản phẩm DB A')->assertDontSee('Sản phẩm ngừng bán');
+            ->assertSee('Chưa có sản phẩm bán chạy.')->assertDontSee('Sản phẩm ngừng bán');
 
         DB::table('categories')->insert(['id' => 9, 'name' => 'Danh mục mới thêm trong DB']);
         $this->get('/san-pham')->assertSee('Danh mục mới thêm trong DB');
+    }
+
+    public function test_home_ranks_active_products_by_units_in_fulfilled_orders(): void
+    {
+        $user = User::factory()->create();
+        $orders = [
+            'DELIVERED' => [1 => 2, 2 => 4, 4 => 20],
+            'COMPLETED' => [1 => 3],
+            'CANCELLED' => [3 => 10],
+        ];
+        foreach ($orders as $status => $quantities) {
+            $order = $user->orders()->create([
+                'order_code' => $status, 'status' => $status, 'recipient_name' => $user->full_name,
+                'recipient_phone' => $user->phone, 'shipping_address' => $user->address,
+                'subtotal' => 10000, 'total_amount' => 10000, 'payment_method' => 'COD',
+            ]);
+            foreach ($quantities as $productId => $quantity) {
+                $order->items()->create([
+                    'product_id' => $productId, 'product_name' => 'Sản phẩm thử',
+                    'unit_price' => 1000, 'quantity' => $quantity,
+                ]);
+            }
+        }
+
+        $this->get('/')->assertOk()->assertSeeInOrder(['Sản phẩm bán chạy', 'Sản phẩm DB A', 'Sản phẩm DB B'])
+            ->assertViewHas('bestSellers', fn ($products) => $products->pluck('id')->all() === [1, 2]);
     }
 
     public function test_category_only_displays_its_available_database_products(): void

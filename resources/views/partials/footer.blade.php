@@ -13,14 +13,6 @@ closing
                 </div>
                 <div class="footer-links">
                     <div class="footer-col">
-                        <h3>Hỗ trợ khách hàng</h3>
-                        <ul>
-                            <li><a href="{{ route('help') }}#dat-hang">Hướng dẫn đặt hàng</a></li>
-                            <li><a href="{{ route('help') }}#van-chuyen">Vận chuyển &amp; đổi trả</a></li>
-                            <li><a href="{{ route('help') }}#bao-mat">Thông tin cá nhân</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-col">
                         <h3>Tài khoản</h3>
                         <ul>
                             <li><a href="{{ route('account.index') }}#don-hang">Đơn hàng của tôi</a></li>

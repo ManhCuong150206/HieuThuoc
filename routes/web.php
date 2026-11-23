@@ -23,7 +23,6 @@ Route::get('/danh-muc/{category}', CategoryController::class)->whereNumber('cate
 Route::get('/bai-viet', [PostController::class, 'index'])->name('posts.index');
 Route::get('/bai-viet/{post}', [PostController::class, 'show'])->whereNumber('post')->name('posts.show');
 
-Route::view('/huong-dan', 'pages.help')->name('help');
 Route::get('/quen-mat-khau', [PasswordResetController::class, 'requestForm'])->name('password.request');
 Route::post('/quen-mat-khau', [PasswordResetController::class, 'send'])->middleware('throttle:5,1')->name('password.email');
 Route::get('/dat-lai-mat-khau/{token}', [PasswordResetController::class, 'resetForm'])->name('password.reset');

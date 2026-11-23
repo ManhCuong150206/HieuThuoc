@@ -3,7 +3,6 @@
     <div class="clinic-topbar">
         <div class="site-container">
             <span>Giao tận nhà · Phí giao 25.000đ mỗi đơn</span>
-            <a href="{{ route('help') }}#van-chuyen">Thông tin vận chuyển</a>
         </div>
     </div>
     <div class="site-container wrap header-main">
@@ -48,8 +47,7 @@
                     </li>
                     <li><a href="{{ route('posts.index') }}"
                             @if (request()->routeIs('posts.*')) aria-current="page" @endif>Tin tức sức khỏe</a></li>
-                    <li><a href="{{ route('help') }}"
-                            @if (request()->routeIs('help')) aria-current="page" @endif>Hướng dẫn mua hàng</a></li>
+
                 </ul>
             </nav>
             <div class="header-drawer-extra">
