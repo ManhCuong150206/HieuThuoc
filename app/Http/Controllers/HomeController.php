@@ -28,7 +28,8 @@ class HomeController extends Controller
                 ->joinSub($sales, 'sales', 'sales.product_id', '=', 'products.id')
                 ->where('products.is_active', true)
                 ->orderByDesc('sales.units_sold')->orderBy('products.id')->limit(4)->get(),
-            'articles' => Post::where('status', 'PUBLISHED')->whereDate('published_at', '<=', today())->orderByDesc('published_at')->limit(3)->get(),
+            'articles' => Post::where('status', 'PUBLISHED')->whereDate('published_at', '<=', today())
+                ->orderByDesc('published_at')->orderByDesc('id')->limit(3)->get(),
         ]);
     }
 }

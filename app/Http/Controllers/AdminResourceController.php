@@ -51,7 +51,10 @@ class AdminResourceController extends Controller
             ],
             'posts' => [
                 'title' => ['required', 'string', 'max:200'], 'content' => ['required', 'string', 'max:500'],
-                'cover_url' => ['nullable', 'url:http,https', 'max:500'],
+                'cover_url' => ['nullable', 'string', 'max:500', Rule::when(
+                    ! in_array($request->input('cover_url'), array_keys(config('health_articles')), true),
+                    'url:http,https',
+                )],
                 'status' => ['required', Rule::in(['DRAFT', 'PUBLISHED'])],
                 'published_at' => ['required_if:status,PUBLISHED', 'nullable', 'date_format:Y-m-d'],
             ],

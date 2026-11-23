@@ -81,19 +81,33 @@
     </section>
 
     @if ($articles->isNotEmpty())
-        <section class="home-section" id="goc-suc-khoe" aria-labelledby="goc-suc-khoe-title">
+        <section class="home-section home-health" id="goc-suc-khoe" aria-labelledby="goc-suc-khoe-title">
             <div class="site-container wrap">
                 <div class="home-section-head">
-                    <x-section-title id="goc-suc-khoe-title" title="Bài viết sức khỏe"
-                        description="Bài viết mới nhất do nhà thuốc đăng." />
+                    <x-section-title id="goc-suc-khoe-title" title="Góc sức khỏe" />
                     <a class="link" href="{{ route('posts.index') }}">Đọc tất cả bài viết</a>
                 </div>
                 <div class="home-articles">
                     @foreach ($articles as $article)
-                        <article class="card home-article">
-                            <p class="eyebrow">{{ $article->published_at?->format('d/m/Y') }}</p>
-                            <h3><a href="{{ route('posts.show', $article) }}">{{ $article->title }}</a></h3>
-                            <p>{{ \Illuminate\Support\Str::limit($article->content, 140) }}</p>
+                        <article @class(['home-article', 'home-article--featured' => $loop->first])>
+                            <a class="home-article-link" href="{{ route('posts.show', $article) }}">
+                                @if ($article->cover_url)
+                                    <div class="home-article-cover">
+                                        <img src="{{ $article->cover_url }}" alt="" loading="lazy" decoding="async">
+                                    </div>
+                                @endif
+                                <div class="home-article-copy">
+                                    @if ($loop->first)<p class="home-article-label">Bài viết nổi bật</p>@endif
+                                    <h3>{{ $article->title }}</h3>
+                                    @if ($loop->first)
+                                        <p>{{ \Illuminate\Support\Str::limit($article->content, 145, preserveWords: true) }}</p>
+                                    @endif
+                                    <div class="home-article-meta">
+                                        <time datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->format('d/m/Y') }}</time>
+                                        <span aria-hidden="true">Đọc bài <span>↗</span></span>
+                                    </div>
+                                </div>
+                            </a>
                         </article>
                     @endforeach
                 </div>

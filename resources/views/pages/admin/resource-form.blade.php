@@ -7,7 +7,7 @@ $fields = match ($resource) {
     'products' => ['name' => ['Tên sản phẩm', 'text', 200, true], 'price' => ['Giá bán (đ)', 'number', null, true], 'quantity' => ['Số lượng tồn kho', 'number', null, true], 'brand' => ['Thương hiệu', 'text', 100, false], 'composition' => ['Thành phần', 'textarea', 500, false], 'used_for' => ['Công dụng', 'textarea', 500, false], 'how_to_use' => ['Cách dùng', 'textarea', 500, false], 'contraindications' => ['Chống chỉ định', 'textarea', 500, false], 'side_effects' => ['Tác dụng phụ', 'textarea', 500, false], 'image_url' => ['URL ảnh (https://...)', 'url', 500, false], 'expiry_date' => ['Hạn sử dụng', 'date', null, false]],
     'categories' => ['name' => ['Tên danh mục', 'text', 100, true]],
     'promotions' => ['name' => ['Tên ưu đãi', 'text', 150, true], 'description' => ['Mô tả', 'textarea', 500, false], 'discount_percent' => ['Phần trăm giảm (0–100)', 'number', null, true], 'starts_at' => ['Ngày bắt đầu', 'date', null, true], 'ends_at' => ['Ngày kết thúc', 'date', null, true]],
-    'posts' => ['title' => ['Tiêu đề', 'text', 200, true], 'content' => ['Nội dung', 'textarea', 500, true], 'cover_url' => ['URL ảnh bìa (https://...)', 'url', 500, false], 'published_at' => ['Ngày xuất bản (bắt buộc khi xuất bản)', 'date', null, false]],
+    'posts' => ['title' => ['Tiêu đề', 'text', 200, true], 'content' => ['Nội dung', 'textarea', 500, true], 'cover_url' => ['Đường dẫn ảnh bìa', 'text', 500, false], 'published_at' => ['Ngày xuất bản (bắt buộc khi xuất bản)', 'date', null, false]],
 };
 @endphp
 <form method="POST" action="{{ $record->exists ? route('admin.resources.update', ['resource' => $resource, 'record' => $record->id]) : route('admin.resources.store', $resource) }}" class="admin-panel admin-form">
