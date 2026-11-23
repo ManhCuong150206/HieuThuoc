@@ -2,6 +2,7 @@
 @import './fonts.css';
 @import './storefront.css';
 @import './interface.css';
+@import './home.css';
 @import './catalog.css';
 @import './transactions.css';
 @import './admin.css';
@@ -9,21 +10,87 @@
 @source '../views/**/*.blade.php';
 @source '../js/**/*.js';
 
+/*
+  Design tokens: the one place for colour, type, radius and shadow.
+  Palette from the logo's own green (#3f6d56) on a warm paper ground, like a pharmacy's paper bag;
+  display face Bricolage Grotesque, text face Be Vietnam Pro (both carry every Vietnamese mark).
+*/
 @theme static {
+    --font-display: 'Bricolage Grotesque', 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
     --font-sans: 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
-    --color-brand: #176b50;
-    --color-dark: #103e32;
-    --color-ink: #172f29;
-    --color-muted: #62756e;
-    --color-paper: #f6f8f5;
-    --color-surface: #ffffff;
-    --color-pale: #eaf5ef;
-    --color-line: #dee8e2;
-    --color-lime: #ddf19b;
-    --color-info: #eaf1fa;
-    --color-warm: #fff5e2;
-    --color-orange: #a46822;
-    --color-field: #d9d9d9;
-    --color-hover: #1e1e1e;
-    --color-hover-border: #2c2c2c;
+
+    --color-paper: #f5f3ee;        /* page ground */
+    --color-stone: #ebe7df;        /* second ground, picture frames */
+    --color-surface: #ffffff;      /* cards, fields, panels */
+    --color-ink: #1d2420;          /* text, 15:1 on paper */
+    --color-muted: #5b605c;        /* labels and meta, 5.9:1 on paper */
+    --color-line: #dad6cd;         /* hairlines */
+    --color-line-strong: #b9b4a9;  /* field and secondary-button borders */
+    --color-brand: #3f6d56;        /* the logo green: primary button, links, focus */
+    --color-dark: #2e5442;         /* the brand band, 7.4:1 under paper text */
+    --color-pale: #e3eae4;         /* soft brand tint for badges and states */
+    --color-night: #1d2420;        /* footer ground */
+    --color-night-muted: #a9ada7;  /* footer labels, 7.6:1 on night */
+    --color-danger: #a3332b;       /* errors */
+    --color-warm: #f4ecdc;
+    --color-info: #e8eef2;
+    --color-lime: #e3eae4;
+    --color-orange: #8a5a1c;
+    --color-field: #b9b4a9;
+    --color-hover: #1d2420;
+    --color-hover-border: #1d2420;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-btn: 10px;
+
+    --shadow-panel: 0 14px 32px -18px rgb(29 36 32 / 35%);
+}
+
+/* Layout rhythm and the names the motion layer (public/assets/motion) reads; all values come from @theme. */
+:root {
+    --nav: 72px;
+    --padt: 120px;
+    --padb: 72px;
+    --hgap: 48px;
+    --hpadb: 64px;
+    --bar: 0px;
+    --ease: cubic-bezier(.2, .8, .2, 1);
+    --s-2: 8px;
+
+    --bg: var(--color-paper);
+    --surface: var(--color-stone);
+    --card: var(--color-surface);
+    --ink: var(--color-ink);
+    --muted: var(--color-muted);
+    --line: var(--color-line);
+    --line-strong: var(--color-line-strong);
+    --accent: var(--color-brand);
+    --action: var(--color-brand);
+    --action-ink: var(--color-paper);
+    --r-btn: var(--radius-btn);
+    --font-text: var(--font-sans);
+    --display-weight: 400;
+    --display-tracking: -0.03em;
+    --display-tracking-xl: -0.04em;
+
+    /* names kept for the page styles that are redesigned in later phases */
+    --radius-badge: var(--radius-sm);
+    --radius-input: var(--radius-sm);
+    --radius-button: var(--radius-btn);
+    --radius-search: var(--radius-md);
+    --radius-art: var(--radius-md);
+    --radius-card: var(--radius-lg);
+    --radius-panel: var(--radius-lg);
+}
+
+@media (max-width: 639px) {
+    :root {
+        --nav: 56px;
+        --padt: 96px;
+        --padb: 48px;
+        --hgap: 40px;
+        --hpadb: 24px;
+    }
 }

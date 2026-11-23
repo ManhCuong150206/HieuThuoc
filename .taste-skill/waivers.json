@@ -1,0 +1,4 @@
+[
+  { "check": "card-layout", "target": "section#san-pham-moi > div.site-container.wrap > div.product-grid", "reason": "a shop's product grid: every product card shares the one card recipe by design, the same component the catalogue pages use" },
+  { "check": "section-gaps", "target": "main#main-content > section.hero.hero--product / section#danh-muc", "reason": "the dealt product hero runs its stage to 24px above the fold and the next h2 sits at --padt; widening this gap would shrink the product under 80% of the wrap" }
+]

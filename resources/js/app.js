@@ -33,11 +33,15 @@ document.querySelectorAll('[data-category-menu]').forEach((root) => {
         menu.hidden = !open;
     };
 
+    // the panel opens after 150ms of hover intent, on wide screens only (the sheet below 1280 opens it by click)
+    let intent;
+    const wide = () => window.matchMedia('(hover: hover) and (min-width: 1280px)').matches;
     root.addEventListener('pointerenter', () => {
-        if (window.matchMedia('(hover: hover)').matches) setOpen(true);
+        if (wide()) intent = window.setTimeout(() => setOpen(true), 150);
     });
     root.addEventListener('pointerleave', () => {
-        if (!root.contains(document.activeElement)) setOpen(false);
+        window.clearTimeout(intent);
+        if (wide() && !root.contains(document.activeElement)) setOpen(false);
     });
     trigger.addEventListener('click', () => setOpen(menu.hidden));
     root.addEventListener('focusout', (event) => {
@@ -55,6 +59,32 @@ document.querySelectorAll('[data-category-menu]').forEach((root) => {
     });
     document.addEventListener('click', (event) => {
         if (!root.contains(event.target)) setOpen(false);
+    });
+});
+
+document.querySelectorAll('[data-site-header]').forEach((header) => {
+    const toggle = header.querySelector('[data-nav-toggle]');
+    const drawer = header.querySelector('#header-drawer');
+    if (!toggle || !drawer) return;
+    const setOpen = (open) => {
+        header.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Đóng menu' : 'Mở menu');
+        document.documentElement.classList.toggle('nav-locked', open);
+    };
+    setOpen(false);
+    toggle.addEventListener('click', () => setOpen(!header.classList.contains('is-open')));
+    drawer.addEventListener('click', (event) => {
+        if (event.target.closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && header.classList.contains('is-open')) {
+            setOpen(false);
+            toggle.focus();
+        }
+    });
+    window.matchMedia('(min-width: 1280px)').addEventListener('change', (query) => {
+        if (query.matches) setOpen(false);
     });
 });
 

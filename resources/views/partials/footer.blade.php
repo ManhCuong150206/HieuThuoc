@@ -1,35 +1,48 @@
-<footer class="site-footer" id="lien-he">
-    <div class="site-container">
-        <div class="footer-columns">
-            <div class="footer-about">
-                <a class="footer-logo" href="{{ route('home') }}" aria-label="An Tâm Pharmacy — Trang chủ">
-                    <img src="{{ asset('images/logo.png') }}" alt="An Tâm Pharmacy — Nhà thuốc trực tuyến">
-                </a>
-                <p>Đồng hành cùng sức khỏe của bạn và gia đình.</p>
-                <p class="footer-note">Địa chỉ • Hotline • Giấy phép: cập nhật khi triển khai</p>
+<footer class="site-footer @hasSection('closing')
+closing
+@endif" id="lien-he">
+    <div class="site-container wrap">
+        @hasSection('closing')
+            <div class="footer-close on-dark">@yield('closing')</div>
+        @endif
+        <div class="footer-directory">
+            <div class="footer-columns">
+                <div class="footer-about">
+                    <p class="footer-name">An Tâm Pharmacy</p>
+                    <p>Nhà thuốc trực tuyến: thuốc không kê đơn, vitamin và đồ chăm sóc cá nhân, giao tận nhà.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h3>Hỗ trợ khách hàng</h3>
+                        <ul>
+                            <li><a href="{{ route('help') }}#dat-hang">Hướng dẫn đặt hàng</a></li>
+                            <li><a href="{{ route('help') }}#van-chuyen">Vận chuyển &amp; đổi trả</a></li>
+                            <li><a href="{{ route('help') }}#bao-mat">Thông tin cá nhân</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Tài khoản</h3>
+                        <ul>
+                            <li><a href="{{ route('account.index') }}#don-hang">Đơn hàng của tôi</a></li>
+                            <li><a href="{{ route('account.index') }}#profile-address">Địa chỉ giao hàng</a></li>
+                            <li><a href="{{ route('favorites.index') }}">Sản phẩm yêu thích</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Về An Tâm</h3>
+                        {{-- Giới thiệu, Liên hệ và Thông tin nhà thuốc chưa có trang riêng nên chưa gắn link. --}}
+                        <ul>
+                            <li class="footer-plain">Giới thiệu</li>
+                            <li class="footer-plain">Liên hệ</li>
+                            <li class="footer-plain">Thông tin nhà thuốc</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <ul aria-label="Về An Tâm">
-                <li>Giới thiệu</li>
-                <li>Liên hệ</li>
-                <li>Thông tin nhà thuốc</li>
-            </ul>
-            <div>
-                <h2>Hỗ trợ khách hàng</h2>
-                <ul>
-                    <li><a href="{{ route('help') }}#dat-hang">Hướng dẫn đặt hàng</a></li>
-                    <li><a href="{{ route('help') }}#van-chuyen">Vận chuyển &amp; đổi trả</a></li>
-                    <li><a href="{{ route('help') }}#bao-mat">Thông tin cá nhân</a></li>
-                </ul>
-            </div>
-            <div>
-                <h2>Tài khoản</h2>
-                <ul>
-                    <li><a href="{{ route('account.index') }}#don-hang">Đơn hàng của tôi</a></li>
-                    <li><a href="{{ route('account.index') }}#profile-address">Địa chỉ giao hàng</a></li>
-                    <li><a href="{{ route('favorites.index') }}">Sản phẩm yêu thích</a></li>
-                </ul>
+            <div class="footer-legal">
+                <p>© {{ now()->year }} An Tâm Pharmacy</p>
+                <p>Địa chỉ, hotline và giấy phép: cập nhật khi triển khai</p>
             </div>
         </div>
-        <p class="footer-note">© 2026 An Tâm •</p>
     </div>
 </footer>
