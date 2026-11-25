@@ -38,24 +38,30 @@ class AccountTest extends TestCase
     public function test_guests_cannot_view_or_update_a_profile(): void
     {
         $this->get('/tai-khoan')->assertRedirect(route('login'));
+        $this->get('/tai-khoan/don-hang')->assertRedirect(route('login'));
         $this->put('/tai-khoan', $this->profileData())->assertRedirect(route('login'));
         $this->assertDatabaseHas('users', ['id' => 11, 'full_name' => 'Nguyễn An']);
     }
 
-    public function test_profile_displays_real_fields_and_empty_order_history(): void
+    public function test_profile_and_order_history_are_separate_pages(): void
     {
         $this->actingAs(Account::find(1))->get('/tai-khoan')->assertOk()
-            ->assertSee('Xin chào, Nguyễn An')->assertSee('an@example.com')->assertSee('12 Đường A')
+            ->assertSee('Thông tin cá nhân')->assertSee('Nguyễn An')->assertSee('an@example.com')->assertSee('12 Đường A')
             ->assertSee('name="_method" value="PUT"', false)
+            ->assertDontSee('Bạn chưa có đơn hàng nào.')
+            ->assertDontSee('other@example.com');
+
+        $this->get('/tai-khoan/don-hang')->assertOk()
             ->assertSee('Bạn chưa có đơn hàng nào.')
-            ->assertDontSee('Minh Anh')->assertDontSee('other@example.com');
+            ->assertDontSee('id="profile-address"', false)
+            ->assertDontSee('id="doi-mat-khau"', false);
     }
 
     public function test_update_only_changes_the_authenticated_accounts_profile(): void
     {
         $data = $this->profileData(['id' => 12, 'account_id' => 2, 'role' => 'ADMIN', 'password' => 'hacked']);
         $this->actingAs(Account::find(1))->put('/tai-khoan', $data)
-            ->assertRedirect(route('account.index').'#thong-tin-ca-nhan')->assertSessionHas('status');
+            ->assertRedirect(route('account.index'))->assertSessionHas('status');
 
         $this->assertDatabaseHas('users', ['id' => 11, 'account_id' => 1, ...$this->profileData()]);
         $this->assertDatabaseHas('users', ['id' => 12, 'email' => 'other@example.com', 'full_name' => 'Khách khác']);
@@ -83,7 +89,7 @@ class AccountTest extends TestCase
     public function test_legacy_account_can_create_its_own_missing_profile(): void
     {
         $this->actingAs(Account::find(3))->get('/tai-khoan')->assertOk()
-            ->assertSee('Xin chào, legacy')->assertDontSee('an@example.com');
+            ->assertSee('legacy')->assertDontSee('an@example.com');
         $this->put('/tai-khoan', $this->profileData(['address' => null]))->assertSessionHasNoErrors();
         $this->assertDatabaseHas('users', ['account_id' => 3, 'email' => 'new@example.com', 'address' => null]);
         $this->assertDatabaseCount('users', 3);
@@ -103,7 +109,7 @@ class AccountTest extends TestCase
             ]);
         }
 
-        $this->actingAs(Account::find(1))->get('/tai-khoan')->assertOk()
+        $this->actingAs(Account::find(1))->get('/tai-khoan/don-hang')->assertOk()
             ->assertSee('MY-ORDER')->assertSee('17/11/2026')->assertSee('20.000đ')->assertSee('Chờ xác nhận')
             ->assertSee('Sản phẩm đã mua')->assertSee('2 sản phẩm')
             ->assertDontSee('PRIVATE-ORDER')->assertDontSee('Món hàng riêng tư');

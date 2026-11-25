@@ -131,26 +131,6 @@ class PharmacyDatabaseTest extends TestCase
         $this->assertNull($post->published_at);
     }
 
-    public function test_favorites_can_attach_update_and_detach_using_both_key_columns(): void
-    {
-        $user = User::factory()->create();
-        $other = User::factory()->create();
-        $product = $this->product();
-
-        $user->favoriteProducts()->attach($product);
-        $other->favoriteProducts()->attach($product);
-        $favorite = $user->favoriteProducts->sole()->pivot;
-        $this->assertSame($user->id, $favorite->user->id);
-        $this->assertSame($product->id, $favorite->product->id);
-        $this->assertSame(now()->toDateString(), $favorite->created_at->toDateString());
-        $this->assertCount(2, $product->favoritedBy);
-        $user->favoriteProducts()->updateExistingPivot($product->id, ['created_at' => '2026-11-20']);
-        $this->assertSame('2026-11-20', $user->favoriteProducts()->sole()->pivot->created_at->toDateString());
-        $user->favoriteProducts()->detach($product);
-        $this->assertDatabaseCount('favorites', 1);
-        $this->assertDatabaseHas('favorites', ['user_id' => $other->id, 'product_id' => $product->id]);
-    }
-
     public function test_duplicate_cart_products_are_rejected(): void
     {
         $user = User::factory()->create();

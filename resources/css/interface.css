@@ -92,7 +92,9 @@
 .product-card-copy h3 a::after { content: ''; position: absolute; inset: 0; z-index: 1; }
 .product-card-copy p { margin-top: 4px; color: var(--color-muted); font-size: 14px; }
 .product-price { margin-top: auto; padding-top: 8px; font-family: var(--font-display); font-size: 24px; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
-.product-card form { position: relative; z-index: 2; margin-top: 8px; }
+.sale-price { display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; }
+.sale-price-original { color: var(--color-muted); font-size: .875em; font-weight: 400; white-space: nowrap; }
+.product-card-actions { position: relative; z-index: 2; display: grid; gap: 8px; margin-top: 8px; }
 @media (hover: hover) and (pointer: fine) {
     html:not([data-motion="off"]) .product-card:hover .product-card-copy h3 a { text-decoration: underline; text-underline-offset: 4px; }
 }

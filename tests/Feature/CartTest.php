@@ -59,7 +59,8 @@ class CartTest extends TestCase
         $this->actingAs(Account::find(1))->get('/gio-hang')->assertOk()
             ->assertSee('aria-label="Giỏ hàng, 5 sản phẩm"', false)
             ->assertSee('Sản phẩm DB A')->assertSee('Sản phẩm DB B')
-            ->assertSee('Số lượng: 3')->assertSee('80.000đ')
+            ->assertSee('Số lượng: 3')->assertSee('30.000đ')->assertSee('50.000đ')
+            ->assertSee('name="items[]"', false)->assertSee('data-selected-total aria-live="polite">0đ', false)
             ->assertDontSee('Sản phẩm riêng khách khác');
 
         $this->actingAs(Account::find(2))->get('/gio-hang')->assertOk()

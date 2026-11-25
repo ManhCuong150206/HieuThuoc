@@ -38,6 +38,22 @@
         </div>
     </section>
 
+    @if ($saleProducts->isNotEmpty())
+        <section class="home-section home-offers" id="san-pham-giam-gia" aria-labelledby="san-pham-giam-gia-title">
+            <div class="site-container wrap">
+                <div class="home-section-head">
+                    <x-section-title id="san-pham-giam-gia-title" title="Sản phẩm đang giảm giá" />
+                    <a class="link" href="{{ route('products.index', ['on_sale' => 1]) }}">Xem tất cả sản phẩm giảm giá</a>
+                </div>
+                <div @class(['product-grid', 'home-offers-grid--compact' => $saleProducts->count() <= 2])>
+                    @foreach ($saleProducts as $product)
+                        <x-product-card :product="$product" />
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
     <section class="home-section" id="san-pham-ban-chay" aria-labelledby="san-pham-ban-chay-title">
         <div class="site-container wrap">
             <div class="home-section-head">
@@ -50,32 +66,6 @@
                 @empty
                     <p class="best-sellers-empty">Chưa có sản phẩm bán chạy.</p>
                 @endforelse
-            </div>
-        </div>
-    </section>
-
-    <section class="home-section" id="thong-tin-san-pham" aria-labelledby="thong-tin-title">
-        <div class="site-container wrap home-info">
-            <div class="home-info-text">
-                <x-section-title id="thong-tin-title" title="5 mục thông tin trên mỗi sản phẩm"
-                    description="Trang của mỗi sản phẩm ghi số lượng còn, hạn sử dụng và những mục nhà thuốc đã cập nhật:" />
-                <ul class="info-rows">
-                    <li>Thành phần</li>
-                    <li>Công dụng</li>
-                    <li>Cách dùng</li>
-                    <li>Chống chỉ định</li>
-                    <li>Tác dụng phụ</li>
-                </ul>
-                <p class="home-info-note">Đánh giá chỉ đến từ đơn đã hoàn thành và được nhà thuốc duyệt trước khi hiển thị.
-                </p>
-            </div>
-            <div class="home-info-pair">
-                <figure class="frame"><img src="{{ asset('images/home/listerine-large.jpg') }}"
-                        alt="Chai nước súc miệng Listerine Cool Mint 250ml" width="652" height="1100" loading="lazy"
-                        decoding="async"></figure>
-                <figure class="frame"><img src="{{ asset('images/home/sensodyne-fresh.jpg') }}"
-                        alt="Tuýp kem đánh răng Sensodyne Fresh Mint 100g" width="459" height="1100" loading="lazy"
-                        decoding="async"></figure>
             </div>
         </div>
     </section>
@@ -100,7 +90,7 @@
                                     @if ($loop->first)<p class="home-article-label">Bài viết nổi bật</p>@endif
                                     <h3>{{ $article->title }}</h3>
                                     @if ($loop->first)
-                                        <p>{{ \Illuminate\Support\Str::limit($article->content, 145, preserveWords: true) }}</p>
+                                        <p>{{ $article->healthGuide()['summary'] ?? \Illuminate\Support\Str::limit($article->content, 145, preserveWords: true) }}</p>
                                     @endif
                                     <div class="home-article-meta">
                                         <time datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->format('d/m/Y') }}</time>
@@ -114,15 +104,4 @@
             </div>
         </section>
     @endif
-@endsection
-
-@section('closing')
-    <div class="footer-close-row">
-        <div>
-            <h2>Thuốc và đồ chăm sóc sức khỏe giao tận nhà</h2>
-            <p>Phí giao 25.000đ mỗi đơn, trả tiền
-                mặt.</p>
-        </div>
-        <x-button :href="route('products.index')">Xem sản phẩm</x-button>
-    </div>
 @endsection

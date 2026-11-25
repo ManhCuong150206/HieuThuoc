@@ -28,14 +28,19 @@
 </head>
 
 <body class="@yield('body-class', 'storefront')">
+    @php
+        $useToastFeedback = View::hasSection('toast-feedback');
+        $toastMessage = $useToastFeedback ? ($errors->any() ? implode(' ', $errors->all()) : session('status')) : null;
+        $toastAction = $toastMessage && !$errors->any() ? session('status_action') : null;
+    @endphp
     @unless (request()->routeIs('admin.*'))
         @include('partials.header')
     @endunless
     <main id="main-content" class="@yield('main-class')" tabindex="-1">
-        @if (session('status'))
+        @if (session('status') && !$useToastFeedback && !View::hasSection('inline-status'))
             <div class="site-container feedback-message auth-success" role="status">{{ session('status') }}</div>
         @endif
-        @if ($errors->any())
+        @if ($errors->any() && !$useToastFeedback && !View::hasSection('inline-validation'))
             <div class="site-container feedback-message feedback-error" role="alert">
                 <p>Vui lòng kiểm tra lại thông tin:</p>
                 <ul>
@@ -52,10 +57,12 @@
     @endunless
     @stack('scripts')
     <div class="ajax-feedback" data-ajax-feedback data-login-url="{{ route('login') }}"
-        data-cart-url="{{ route('cart.index') }}" data-favorites-url="{{ route('favorites.index') }}" hidden>
-        <div>
-            <p role="status" aria-live="polite" aria-atomic="true" data-ajax-message></p>
-            <a class="text-action" data-ajax-link hidden></a>
+        data-cart-url="{{ route('cart.index') }}"
+        @if ($toastMessage) data-state="{{ $errors->any() ? 'error' : 'success' }}" @else hidden @endif>
+        <span class="ajax-feedback-mark" aria-hidden="true"></span>
+        <div class="ajax-feedback-content">
+            <p role="status" aria-live="polite" aria-atomic="true" data-ajax-message>{{ $toastMessage }}</p>
+            <a class="ajax-feedback-action" data-ajax-link @if ($toastAction) href="{{ $toastAction['url'] }}" @else hidden @endif>{{ $toastAction['label'] ?? '' }}</a>
         </div>
         <button type="button" class="ajax-feedback-close" aria-label="Đóng thông báo" data-ajax-dismiss>×</button>
     </div>

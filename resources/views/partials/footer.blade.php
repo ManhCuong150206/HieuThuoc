@@ -1,10 +1,5 @@
-<footer class="site-footer @hasSection('closing')
-closing
-@endif" id="lien-he">
+<footer class="site-footer" id="lien-he">
     <div class="site-container wrap">
-        @hasSection('closing')
-            <div class="footer-close on-dark">@yield('closing')</div>
-        @endif
         <div class="footer-directory">
             <div class="footer-columns">
                 <div class="footer-about">
@@ -15,9 +10,8 @@ closing
                     <div class="footer-col">
                         <h3>Tài khoản</h3>
                         <ul>
-                            <li><a href="{{ route('account.index') }}#don-hang">Đơn hàng của tôi</a></li>
-                            <li><a href="{{ route('account.index') }}#profile-address">Địa chỉ giao hàng</a></li>
-                            <li><a href="{{ route('favorites.index') }}">Sản phẩm yêu thích</a></li>
+                            <li><a href="{{ route('account.index') }}">Thông tin cá nhân</a></li>
+                            <li><a href="{{ route('account.orders') }}">Đơn hàng của tôi</a></li>
                         </ul>
                     </div>
                     <div class="footer-col">
@@ -36,7 +30,7 @@ closing
     <div class="footer-bottom">
         <div class="site-container footer-legal">
             <p>© {{ now()->year }} An Tâm Pharmacy</p>
-            <p>Địa chỉ, hotline và giấy phép: cập nhật khi triển khai</p>
+
         </div>
     </div>
 </footer>

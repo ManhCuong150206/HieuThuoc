@@ -1,0 +1,158 @@
+.news-index, .health-article {
+    padding-block: clamp(24px, 3vw, 44px) clamp(52px, 7vw, 100px);
+    overflow-wrap: anywhere;
+}
+.news-masthead { margin-bottom: clamp(24px, 3vw, 40px); }
+.news-heading-row, .health-dateline {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    border-bottom: 1px solid var(--color-line-strong);
+}
+.news-heading-row { padding: 20px 0; }
+.news-heading-row h1, .health-head h1 {
+    letter-spacing: -.045em;
+    font-weight: 550;
+    line-height: 1.12;
+}
+.news-heading-row h1 { font-size: clamp(36px, 5vw, 68px); }
+.news-heading-row > span, .news-meta, .health-dateline time, .health-banner figcaption {
+    font-size: 14px;
+    color: var(--color-muted);
+}
+.news-stories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+.news-story { min-width: 0; }
+.news-story-link {
+    display: grid;
+    grid-template-columns: minmax(110px, .72fr) minmax(0, 1.28fr);
+    height: 100%;
+    overflow: hidden;
+    border-top: 1px solid var(--color-line-strong);
+    padding-top: 20px;
+    gap: clamp(16px, 2vw, 30px);
+}
+.news-story-image { position: relative; overflow: hidden; border-radius: var(--radius-sm); }
+.news-story-image img {
+    width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover;
+    transition: transform .25s var(--ease);
+}
+.news-story-copy { display: grid; align-content: center; justify-items: start; gap: 14px; padding-block: 8px; }
+.news-story-copy h2 { font-size: clamp(23px, 2.1vw, 32px); font-weight: 550; letter-spacing: -.035em; }
+.news-story-copy > p { color: var(--color-muted); }
+.news-meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 3px 12px; }
+.news-meta span, .health-topic, .health-step-label { color: var(--color-dark); font-weight: 650; }
+.news-meta time { font-variant-numeric: tabular-nums; }
+.news-read { display: inline-flex; align-items: center; gap: 10px; color: var(--color-brand); font-size: 15px; font-weight: 650; }
+.news-read span { font-size: 1.2em; }
+.news-story--lead { grid-column: 1 / -1; }
+.news-story--lead .news-story-link {
+    grid-template-columns: 1fr 1fr;
+    background: var(--color-pale); padding: 0; gap: 0;
+    border: 0; border-radius: var(--radius-md);
+}
+.news-story--lead .news-story-image { grid-area: 1 / 2; border-radius: 0; min-height: 320px; }
+.news-story--lead img { object-position: center 58%; }
+.news-story--lead .news-story-copy { grid-area: 1 / 1; gap: 18px; padding: clamp(26px, 4.5vw, 72px); }
+.news-story--lead h2 { font-size: clamp(32px, 3.5vw, 54px); }
+.news-story--lead .news-read { border-bottom: 1px solid currentColor; padding-block: 4px; }
+.news-story--text .news-story-link { grid-template-columns: 1fr; }
+.news-story-link:hover h2, .news-story-link:focus-visible h2 { color: var(--color-brand); }
+.news-story-link:hover img { transform: scale(1.025); }
+.news-index .pagination { margin-top: 32px; }
+
+.health-article { max-width: 1140px; }
+.health-dateline { align-items: center; padding-bottom: 12px; }
+.health-head h1 { max-width: 27ch; font-size: clamp(34px, 4.2vw, 62px); margin-top: 20px; }
+.health-topic { font-size: 14px; margin-top: clamp(20px, 3vw, 40px); }
+.health-topic + h1 { margin-top: 10px; }
+.health-summary {
+    max-width: 72ch; margin-top: 22px; padding-left: 16px;
+    border-left: 3px solid var(--color-brand); color: var(--color-dark);
+    font-size: clamp(17px, 1.5vw, 21px); line-height: 1.6; white-space: pre-line;
+}
+.health-banner {
+    display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+    align-items: start; gap: clamp(24px, 3.5vw, 54px);
+    margin-top: clamp(24px, 3vw, 40px);
+}
+.health-banner figure:only-child { grid-column: 1 / -1; }
+.health-banner img { width: 100%; aspect-ratio: 1.65; object-fit: cover; object-position: center 57%; border-radius: var(--radius-sm); }
+.health-banner figcaption { padding-top: 10px; line-height: 1.55; }
+.health-contents { background: var(--color-pale); padding: clamp(20px, 2.5vw, 34px); border-radius: var(--radius-sm); }
+.health-contents h2, .health-sources h2 { font-size: 23px; font-weight: 600; letter-spacing: -.025em; }
+.health-contents ol { margin-top: 12px; }
+.health-contents li + li { border-top: 1px solid color-mix(in srgb, var(--color-brand) 24%, transparent); }
+.health-contents a { display: grid; grid-template-columns: 2ch 1fr; gap: 14px; align-items: baseline; padding: 10px 0; line-height: 1.45; }
+.health-contents a span, .health-number { color: var(--color-brand); font-variant-numeric: tabular-nums; }
+.health-contents a span { font-size: 13px; font-weight: 650; }
+.health-contents a:hover, .health-sources a:hover { text-decoration: underline; }
+.health-reading { max-width: 820px; margin: clamp(32px, 5vw, 68px) auto 0; font-size: clamp(16px, 1.3vw, 18px); line-height: 1.7; }
+.health-section { border-top: 1px solid var(--color-line-strong); padding-block: clamp(24px, 3vw, 38px); }
+.health-section h2 {
+    display: flex; align-items: baseline; gap: 14px; font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 550; letter-spacing: -.035em; text-wrap: pretty;
+}
+.health-number { flex: none; white-space: nowrap; font-size: .56em; letter-spacing: 0; }
+.health-section > * + *, .health-plain + .health-plain { margin-top: 18px; }
+.health-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 26px; }
+.health-steps li { border-top: 2px solid var(--color-brand); padding-top: 12px; }
+.health-step-label { font-size: 13px; }
+.health-steps h3 { margin: 3px 0 7px; font-size: 21px; font-weight: 600; }
+.health-steps p, .health-table { font-size: 16px; }
+.health-table { width: 100%; border-collapse: collapse; line-height: 1.5; }
+.health-table caption { text-align: left; padding-bottom: 12px; color: var(--color-muted); }
+.health-table th, .health-table td { text-align: left; vertical-align: top; padding: 12px 14px; border: 1px solid var(--color-line); }
+.health-table th { color: var(--color-dark); background: var(--color-pale); font-weight: 650; }
+.health-table td { background: var(--color-surface); }
+.health-table:has(th:nth-child(2):last-child) { table-layout: fixed; }
+.health-formula, .health-note { background: var(--color-pale); border-radius: var(--radius-sm); padding: 20px; }
+.health-formula { font-size: 22px; }
+.health-note { border-inline-start: 3px solid var(--color-brand); }
+.health-points { list-style: disc; padding-inline-start: 1.25em; }
+.health-points li + li { margin-top: 8px; }
+.health-plain { white-space: pre-line; }
+.health-sources { display: grid; justify-items: start; gap: 8px; border-top: 1px solid var(--color-line-strong); padding-top: 24px; font-size: 15px; }
+.health-sources a { color: var(--color-brand); text-decoration: underline; text-underline-offset: 3px; }
+.health-sources .news-read { margin-top: 16px; text-decoration: none; }
+.health-comments {
+    display: grid; gap: 16px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--color-line-strong);
+    font-size: 16px;
+}
+.health-comments h2 { font-size: 23px; font-weight: 600; }
+.discussion-results { display: contents; }
+.health-comments h2 span, .health-comments time { color: var(--color-muted); font-size: 14px; }
+.health-comments .discussion-entry { border-top: 1px solid var(--color-line); padding: 12px; }
+.health-comments .discussion-entry header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.health-comments h3 { font-weight: 600; overflow-wrap: anywhere; }
+@media (min-width: 960px) {
+    .health-steps:has(li:nth-child(4):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .health-steps:has(li:nth-child(4):last-child) li:not(:last-child) .health-step-label::after {
+        content: ' →' / ''; margin-left: 6px;
+    }
+}
+@media (max-width: 920px) {
+    .news-story-link { grid-template-columns: 1fr; }
+    .news-story-image { aspect-ratio: 16 / 9; }
+    .news-story--lead .news-story-image { aspect-ratio: auto; }
+    .health-banner { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; }
+    .health-banner img { aspect-ratio: 1.25; }
+}
+@media (max-width: 680px) {
+    .news-stories, .news-story--lead .news-story-link, .health-banner { grid-template-columns: minmax(0, 1fr); }
+    .news-story--lead .news-story-image, .news-story--lead .news-story-copy { grid-area: auto; }
+    .news-story--lead .news-story-image { min-height: 0; aspect-ratio: 1.75; }
+    .news-story--lead .news-story-copy { padding: 22px; }
+    .news-story-copy { gap: 10px; }
+    .health-banner img { aspect-ratio: 1.5; }
+    .health-steps { grid-template-columns: 1fr; }
+    .health-table { font-size: 14px; }
+    .health-table th, .health-table td { padding: 8px 5px; }
+    .health-dateline { align-items: baseline; }
+    .health-reading { margin-top: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .news-story-image img { transition: none; }
+    .news-story-link:hover img { transform: none; }
+}

@@ -95,25 +95,25 @@ Chỉ chạy `key:generate` khi `.env` mới tạo hoặc `APP_KEY` chưa có gi
 | Chi tiết sản phẩm trong dump | `/san-pham/64` |
 | Giỏ hàng và thanh toán | `/gio-hang` hoặc `/thanh-toan` |
 | Thông tin đơn sau khi đặt | `/dat-hang-thanh-cong/{id}` (chỉ chủ đơn được xem) |
-| Tài khoản và đơn hàng | `/tai-khoan` |
+| Thông tin cá nhân | `/tai-khoan` |
+| Đơn hàng của tôi | `/tai-khoan/don-hang` |
 | Quản trị nhà thuốc | `/admin` |
 | Đăng nhập | `/dang-nhap` |
 | Quên mật khẩu | `/quen-mat-khau` |
-| Sản phẩm yêu thích | `/yeu-thich` |
 | Tin tức sức khỏe | `/bai-viet` |
 | Hướng dẫn mua hàng | `/huong-dan` |
 
 Đăng ký tại `/dang-ky` rồi đăng nhập để mua hàng. Tìm kiếm theo tên/thương hiệu, sắp xếp, phân trang; thêm hoặc mua ngay từ chi tiết sản phẩm. Giỏ hàng lưu theo hồ sơ khách hàng, hỗ trợ cập nhật số lượng, xóa từng dòng và xóa toàn bộ.
 
-Thêm vào giỏ và lưu yêu thích dùng Ajax: thông báo tại chỗ, cập nhật số giỏ hàng và trạng thái nút mà không tải lại trang. Lỗi tồn kho/phiên đăng nhập được hiển thị tại chỗ; nút Mua ngay vẫn chuyển tới thanh toán. Các form vẫn hoạt động bằng POST thông thường khi JavaScript bị tắt.
+Thêm vào giỏ dùng Ajax để hiện thông báo và cập nhật số lượng trên giỏ ngay tại chỗ. Lỗi tồn kho và phiên đăng nhập hiện cạnh thao tác. Nút Mua ngay chuyển tới trang thanh toán. Form vẫn dùng POST khi JavaScript bị tắt.
 
 Đặt hàng lưu `orders`, `order_items` và `payments` trong cùng transaction, trừ tồn kho và chỉ xóa giỏ sau khi lưu thành công. Giá, ưu đãi và số lượng được tính lại từ database; mã xác nhận ngăn tạo đơn trùng khi gửi lại form. Phí giao hàng hiện tại là **25.000đ/đơn**.
 
 **Tiền mặt:** theo yêu cầu của bản hiện tại, đặt hàng sẽ tự duyệt đơn thành `CONFIRMED`, thanh toán thành `SUCCESS` và lưu ngày thanh toán. Đây là hành vi của ứng dụng; không kết nối một cổng thanh toán. **QR:** hiển thị “Đang bổ sung”, bị khóa trên giao diện và bị từ chối ở backend.
 
-Trong tài khoản có cập nhật hồ sơ/địa chỉ, đổi mật khẩu, xem chi tiết đơn, hủy trước khi giao (hoàn tồn kho đúng một lần), đặt lại và yêu thích. Đơn `COMPLETED` mới được đánh giá; mỗi dòng đơn một đánh giá và cần quản trị duyệt trước khi công khai.
+Trang Thông tin cá nhân cho phép cập nhật hồ sơ, địa chỉ và đổi mật khẩu. Trang Đơn hàng của tôi cho phép xem chi tiết, đặt lại hoặc hủy trước khi giao để hoàn tồn kho đúng một lần. Với đơn `COMPLETED`, mỗi dòng đơn có thể nhận một đánh giá và đánh giá được công khai ngay khi gửi.
 
-Quản trị tại `/admin` hỗ trợ sản phẩm, giá và tồn kho, hạn dùng, danh mục, ưu đãi theo thời gian, bài viết, khóa/mở khách hàng, xử lý đơn, duyệt đánh giá và xuất CSV. Ngừng sản phẩm/ưu đãi giữ nguyên lịch sử; ẩn bài viết chuyển về nháp. Danh mục đang có sản phẩm không được xóa.
+Quản trị tại `/admin` hỗ trợ sản phẩm, giá và tồn kho, hạn dùng, danh mục, ưu đãi theo thời gian, bài viết, khóa/mở khách hàng, xử lý đơn, xóa đánh giá và xuất CSV. Ngừng sản phẩm/ưu đãi giữ nguyên lịch sử; ẩn bài viết chuyển về nháp. Danh mục đang có sản phẩm không được xóa.
 
 ### Test nhanh với database nhóm
 
@@ -122,7 +122,7 @@ Quản trị tại `/admin` hỗ trợ sản phẩm, giá và tồn kho, hạn d
 3. Điền địa chỉ, chọn ưu đãi nếu có, chọn tiền mặt và xác nhận. Xem mã đơn trong tài khoản; kiểm tra các bảng `orders`, `order_items`, `payments`, tồn kho giảm và giỏ được xóa.
 4. Test hủy trước khi giao để kiểm tra hoàn kho; hoặc dùng admin chuyển đơn lần lượt sang đang xử lý/đang giao/đã giao/hoàn thành rồi gửi đánh giá bằng tài khoản khách.
 
-Luồng quên mật khẩu gửi liên kết qua mailer Laravel, token được băm trong `password_reset_tokens`, có hạn 60 phút và dùng một lần. Với `MAIL_MAILER=log`, email nằm trong `storage/logs/laravel.log`; để gửi tới hộp thư thật, cấu hình SMTP trong `.env`. Không đưa log hoặc liên kết khôi phục lên Git.
+Luồng quên mật khẩu kiểm tra email đã đăng ký, gửi mã OTP 6 số qua mailer Laravel và mở form mật khẩu mới sau khi xác minh mã. OTP có hạn 10 phút, dùng một lần và bị khóa sau 5 lần nhập sai. `password_reset_tokens` lưu mã băm có khóa thay cho OTP gốc. Để gửi qua Gmail, đặt `MAIL_MAILER=smtp`, `MAIL_SCHEME=smtps`, `MAIL_HOST=smtp.gmail.com`, `MAIL_PORT=465`, và cấu hình `MAIL_USERNAME`, `MAIL_FROM_ADDRESS`, `MAIL_PASSWORD` trong `.env`. Với `MAIL_MAILER=log`, thư kiểm thử được ghi vào log cục bộ.
 
 ## Khai báo database
 
@@ -131,7 +131,7 @@ Luồng quên mật khẩu gửi liên kết qua mailer Laravel, token được 
 | Bảng | Model |
 | --- | --- |
 | `accounts` | `Account` — xác thực, quyền, hồ sơ và bài viết |
-| `users` | `CustomerProfile` / `User` — hồ sơ khách hàng, giỏ hàng, đơn hàng và yêu thích |
+| `users` | `CustomerProfile` / `User` — hồ sơ khách hàng, giỏ hàng và đơn hàng |
 | `categories` | `Category` |
 | `products` | `Product` |
 | `cart_items` | `CartItem` |
@@ -139,28 +139,32 @@ Luồng quên mật khẩu gửi liên kết qua mailer Laravel, token được 
 | `orders` | `Order` |
 | `order_items` | `OrderItem` |
 | `payments` | `Payment` |
-| `favorites` | `Favorite` — pivot khóa ghép `user_id, product_id` |
+| `favorites` | Bảng từ bản dữ liệu cũ, được giữ để bảo toàn dữ liệu đã lưu |
 | `reviews` | `Review` |
 | `posts` | `Post` |
 
-`users.id` là ID hồ sơ, khác với `accounts.id`. Các quan hệ giỏ hàng, đơn hàng và yêu thích tham chiếu ID hồ sơ. Model không tự ghi `updated_at` vì dump không có cột này. Các cột ngày, số lượng và trạng thái bật/tắt có cast phù hợp.
-
-Quản lý mục yêu thích qua `$profile->favoriteProducts()->attach($productId)`, `updateExistingPivot(...)` và `detach($productId)`; bảng này không có cột `id`. Logic giỏ hàng và đặt/hủy/đặt lại đơn nằm trong `app/Services/`.
+`users.id` là ID hồ sơ, khác với `accounts.id`. Các quan hệ giỏ hàng và đơn hàng tham chiếu ID hồ sơ. Model không tự ghi `updated_at` vì dump không có cột này. Các cột ngày, số lượng và trạng thái bật/tắt có cast phù hợp.
 
 `DatabaseSeeder` không tự tạo tài khoản hoặc sao chép dữ liệu cá nhân từ dump. Khi cần dữ liệu phát triển, dùng `Account::factory()` và `User::factory()`; factory hồ sơ tự tạo tài khoản liên quan. Bộ kiểm thử database chạy migration thật trên SQLite trong bộ nhớ, tách khỏi database MySQL trong `.env`.
+
+## Cấu trúc MVC
+
+| Lớp | Vị trí | Trách nhiệm |
+| --- | --- | --- |
+| Route | `routes/web.php`, `routes/auth.php`, `routes/admin.php` | Gắn URL và middleware với action của controller |
+| Controller | `app/Http/Controllers/` | Nhận request, điều phối xử lý rồi trả Blade, JSON hoặc redirect |
+| Form Request | `app/Http/Requests/` | Xác thực dữ liệu đầu vào và khai báo thông báo lỗi cho các form |
+| Model | `app/Models/` | Biểu diễn dữ liệu Eloquent, khai báo quan hệ, scope và quy tắc trên từng bản ghi |
+| Query | `app/Queries/` | Chuẩn bị danh sách quản trị, số liệu tổng quan và thống kê đánh giá |
+| Service | `app/Services/` | Xử lý nghiệp vụ và giao dịch như đặt hàng, cập nhật tồn kho và đặt lại mật khẩu |
+| View | `resources/views/` | Render trang Blade, layout và component từ dữ liệu đã chuẩn bị |
+| Tài nguyên giao diện | `resources/js/`, `resources/css/`, `public/images/` | Tương tác trình duyệt, CSS và hình ảnh |
+
+Controller theo nhóm nghiệp vụ nằm trong `Account/`, `Admin/` và `Auth/`. Ví dụ, `POST /thanh-toan` đi qua `PlaceOrderRequest` và `CheckoutController::store()`. `OrderService::place()` khóa tồn kho, tạo đơn cùng giao dịch thanh toán, rồi xóa các dòng giỏ đã đặt. Controller chuyển sang trang xác nhận, nơi Blade hiển thị đơn và sản phẩm đã đặt.
 
 ## Khi chỉnh giao diện
 
 Giữ `php artisan serve` chạy trong terminal thứ nhất. Trong terminal thứ hai, ở cùng thư mục dự án, chạy `npm.cmd run dev` để Vite cập nhật CSS và JavaScript khi sửa file. Nếu chỉ muốn xem bản build, chạy `npm.cmd run build` sau khi sửa và dùng một terminal để chạy Laravel.
-
-| Thư mục hoặc file | Nội dung |
-| --- | --- |
-| `routes/web.php` | URL và tên route |
-| `app/Http/Controllers/` | Controller chuẩn bị dữ liệu cho view |
-| `app/Services/` | Giỏ hàng, kiểm tra tồn kho, giao dịch đặt/hủy đơn |
-| `resources/views/` | Layout, partial, component và các trang Blade |
-| `resources/css/` | Theme, font và CSS responsive |
-| `public/images/` | Logo và SVG xuất từ Figma |
 
 Có thể chạy `php artisan route:list` để xem các URL và `php artisan test` để chạy bộ kiểm tra có sẵn sau khi build.
 

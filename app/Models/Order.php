@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Observers\OrderObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[ObservedBy([OrderObserver::class])]
 class Order extends Model
 {
     public $timestamps = false;
@@ -17,6 +21,16 @@ class Order extends Model
     protected function casts(): array
     {
         return ['subtotal' => 'integer', 'discount_amount' => 'integer', 'shipping_fee' => 'integer', 'total_amount' => 'integer', 'created_at' => 'date'];
+    }
+
+    public function scopeFulfilled(Builder $query): Builder
+    {
+        return $query->whereIn('orders.status', ['DELIVERED', 'COMPLETED']);
+    }
+
+    public function belongsToAccount(Account $account): bool
+    {
+        return $this->user_id === $account->profile?->id;
     }
 
     public function user(): BelongsTo

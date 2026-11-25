@@ -13,7 +13,7 @@ class HomeController extends Controller
     public function __invoke(): View
     {
         $sales = OrderItem::selectRaw('product_id, SUM(quantity) AS units_sold')
-            ->whereHas('order', fn ($order) => $order->whereIn('status', ['DELIVERED', 'COMPLETED']))
+            ->whereHas('order', fn ($order) => $order->fulfilled())
             ->groupBy('product_id');
 
         return view('pages.home', [
@@ -24,12 +24,12 @@ class HomeController extends Controller
                 ['heart', 'Chăm sóc tận tâm', 'Hỗ trợ trước và sau mua'],
             ],
             'categories' => Category::orderBy('id')->get(),
-            'bestSellers' => Product::with('category')->select('products.*')
+            'saleProducts' => Product::forCatalog()->onSale()
+                ->orderByDesc('product_discount_percent')->orderByDesc('products.id')->limit(4)->get(),
+            'bestSellers' => Product::select('products.*')->forCatalog()
                 ->joinSub($sales, 'sales', 'sales.product_id', '=', 'products.id')
-                ->where('products.is_active', true)
                 ->orderByDesc('sales.units_sold')->orderBy('products.id')->limit(4)->get(),
-            'articles' => Post::where('status', 'PUBLISHED')->whereDate('published_at', '<=', today())
-                ->orderByDesc('published_at')->orderByDesc('id')->limit(3)->get(),
+            'articles' => Post::latestPublished()->limit(3)->get(),
         ]);
     }
 }

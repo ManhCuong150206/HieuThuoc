@@ -27,6 +27,11 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function imageProduct(): Product
+    {
+        return $this->product ?? new Product(['name' => $this->product_name]);
+    }
+
     public function review(): HasOne
     {
         return $this->hasOne(Review::class);

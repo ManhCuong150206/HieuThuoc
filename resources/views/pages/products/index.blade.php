@@ -1,18 +1,19 @@
 @extends('layouts.app')
-@section('title', $category?->name ?? 'Danh mục sản phẩm')
+@section('title', $onSale ? 'Sản phẩm đang giảm giá' : ($category?->name ?? 'Danh mục sản phẩm'))
 @section('content')
 <div class="site-container page-stack">
-    <header class="page-title">
-        <x-section-title :title="$category?->name ?? 'Tất cả sản phẩm'" description="Khám phá các sản phẩm chăm sóc sức khỏe tại An Tâm." :level="1" />
-        <x-breadcrumb :items="[['label' => $category?->name ?? 'Danh mục sản phẩm']]" />
-    </header>
+    @if ($onSale)
+        <x-section-title title="Sản phẩm đang giảm giá" :level="1" />
+    @else
+        <h1 class="sr-only">{{ $category?->name ?? 'Tất cả sản phẩm' }}</h1>
+    @endif
     <div class="catalog-layout">
         <aside class="catalog-filters" aria-labelledby="filters-title">
             <h2 id="filters-title">Danh mục sản phẩm</h2>
             <div class="filter-group">
-                <a href="{{ route('products.index') }}" @if (!$category) aria-current="page" @endif>Tất cả sản phẩm</a>
+                <a href="{{ route('products.index') }}" @if (!$category && !$onSale) aria-current="page" @endif>Tất cả sản phẩm</a>
                 @foreach ($categories as $item)
-                    <a href="{{ route('categories.show', $item) }}" @if ($category?->id === $item->id) aria-current="page" @endif>{{ $item->name }}</a>
+                    <a href="{{ route('categories.show', $item) }}" @if ($category?->id === $item->id && !$onSale) aria-current="page" @endif>{{ $item->name }}</a>
                 @endforeach
             </div>
         </aside>
@@ -20,6 +21,7 @@
             <div class="catalog-sort">
                 <p>{{ $products->total() }} sản phẩm</p>
                 <form class="catalog-sort-form" method="GET" action="{{ $category ? route('categories.show', $category) : route('products.index') }}">
+                    @if ($onSale)<input type="hidden" name="on_sale" value="1">@endif
                     @if ($search)<input type="hidden" name="q" value="{{ $search }}">@endif
                     <label for="catalog-sort">Sắp xếp</label>
                     <select id="catalog-sort" name="sort">
@@ -31,7 +33,7 @@
                 </form>
             </div>
             @if ($products->isEmpty())
-                <div class="checkout-panel"><p>Chưa có sản phẩm trong danh mục này.</p></div>
+                <div class="checkout-panel"><p>{{ $onSale ? 'Chưa có sản phẩm đang giảm giá phù hợp.' : 'Chưa có sản phẩm trong danh mục này.' }}</p></div>
             @else
                 <div class="product-grid catalog-grid">
                     @foreach ($products as $product)<x-product-card :product="$product" />@endforeach

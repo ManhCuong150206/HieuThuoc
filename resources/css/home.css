@@ -7,8 +7,7 @@
     background: linear-gradient(115deg, var(--color-night), var(--color-dark) 62%, var(--color-brand));
 }
 .hero--intro > .wrap { display: grid; justify-items: start; gap: 20px; }
-.hero-brand { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; letter-spacing: .08em; }
-.hero-brand::before { content: ''; width: 32px; border-top: 2px solid currentColor; }
+.hero-brand { font-size: 14px; font-weight: 600; letter-spacing: .08em; }
 .hero--intro h1 { font-size: clamp(40px, 5vw, 78px); line-height: 1.08; }
 .hero-highlight { display: block; color: var(--color-pale); font-style: italic; }
 .hero--intro .hero__lead { max-width: 48ch; color: var(--color-paper); font-size: clamp(16px, 1.4vw, 20px); }
@@ -62,24 +61,25 @@
     .home-split-picture { aspect-ratio: 1; }
 }
 
-/* the information section: the list on 1-7, two photographs at one ratio on 8-12 */
-.home-info { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: start; }
-.home-info-text { grid-column: 1 / span 7; display: grid; gap: 32px; }
-.info-rows { border-top: 1px solid var(--color-line); }
-.info-rows li { display: flex; align-items: center; min-height: 56px; border-bottom: 1px solid var(--color-line); font-family: var(--font-display); font-size: 22px; }
-.home-info-note { max-width: 52ch; font-size: 17px; }
-.home-info-pair { grid-column: 8 / span 5; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .frame { margin: 0; border-radius: var(--radius-lg); overflow: hidden; background: var(--color-surface); }
-.home-info-pair .frame { aspect-ratio: 2 / 3; padding: 24px; }
-.home-info-pair img { width: 100%; height: 100%; object-fit: contain; }
-@media (max-width: 1023px) {
-    .home-info { grid-template-columns: 1fr; gap: 40px; }
-    .home-info-text, .home-info-pair { grid-column: 1 / -1; }
-}
-@media (max-width: 639px) {
-    .home-info-pair { gap: 12px; }
-    .home-info-pair .frame { padding: 16px; }
-    .info-rows li { min-height: 48px; font-size: 19px; }
+
+.home-section.home-offers { background: var(--color-pale); }
+.home-offers .home-section-head { margin-bottom: clamp(24px, 3vw, 40px); }
+.home-offers .product-price .sale-price > span:last-child { color: var(--color-brand); font-weight: 600; }
+@media (min-width: 1024px) {
+    .home-offers-grid--compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .home-offers-grid--compact .product-card {
+        display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    }
+    .home-offers-grid--compact .product-card-art {
+        grid-area: 1 / 1; aspect-ratio: auto; min-height: 260px;
+        border-bottom: 0; border-inline-end: 1px solid var(--color-line);
+    }
+    .home-offers-grid--compact .product-card-art img { padding: 24px; }
+    .home-offers-grid--compact .product-card > .badge {
+        grid-area: 1 / 1; justify-self: start; margin: 12px;
+    }
+    .home-offers-grid--compact .product-card-body { grid-area: 1 / 2; }
 }
 
 .home-health { background: var(--color-pale); }
@@ -120,20 +120,4 @@
 @media (prefers-reduced-motion: reduce) {
     .home-article-cover img { transition: none; }
     .home-article-link:hover img { transform: none; }
-}
-
-/* ---------------------------------------------------------------- the close and the directory: one screen on the home page */
-.site-footer.closing { padding-block: 64px 32px; }
-.site-footer.closing > .wrap { display: flex; flex-direction: column; justify-content: space-between; gap: 64px; }
-.footer-close-row { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: start; }
-.footer-close-row > div { grid-column: 1 / span 7; display: grid; gap: 20px; }
-.footer-close-row h2 { font-size: clamp(32px, 1.66vw + 23.5px, 48px); letter-spacing: var(--display-tracking); }
-.footer-close-row p { max-width: 52ch; font-size: 18px; }
-.footer-close-row > .btn { grid-column: 8 / span 5; justify-self: start; margin-top: 8px; }
-@media (max-width: 1023px) {
-    .footer-close-row { grid-template-columns: 1fr; }
-    .footer-close-row > div, .footer-close-row > .btn { grid-column: 1 / -1; }
-}
-@media (max-width: 639px) {
-    .footer-close-row > .btn { justify-self: stretch; }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CartQuantityRequest;
 use App\Models\Product;
 use App\Services\CartService;
 use Illuminate\Http\JsonResponse;
@@ -17,50 +18,63 @@ class CartController extends Controller
 
         return view('pages.cart.index', [
             'items' => $items, 'quantity' => (int) $items->sum('quantity'),
-            'subtotal' => $items->sum(fn ($item) => (int) round($item->price) * $item->quantity),
+            'selectedIds' => $request->session()->get('checkout_item_ids', []),
         ]);
     }
 
-    public function store(Request $request, Product $product, CartService $cart): RedirectResponse|JsonResponse
+    public function store(CartQuantityRequest $request, Product $product, CartService $cart): RedirectResponse|JsonResponse
     {
-        $data = $request->validate(['quantity' => ['required', 'integer', 'min:1', 'max:999']]);
-        $cart->add($request->user(), $product->id, (int) $data['quantity']);
+        $data = $request->validated();
+        $itemId = $cart->add($request->user(), $product->id, (int) $data['quantity']);
         $request->session()->forget('checkout_token');
 
-        if ($request->expectsJson()) {
-            return response()->json([
-                'message' => 'Đã thêm sản phẩm vào giỏ hàng.',
-                'cart_quantity' => $cart->quantityFor($request->user()),
-            ]);
+        if (! $request->expectsJson() && $request->boolean('buy_now')) {
+            $request->session()->put('checkout_item_ids', [$itemId]);
+
+            return redirect()->route('checkout.index');
         }
 
-        return $request->boolean('buy_now')
-            ? redirect()->route('checkout.index')
-            : back()->with('status', 'Đã thêm sản phẩm vào giỏ hàng.');
+        return $this->mutationResponse($request, $cart, 'Đã thêm sản phẩm vào giỏ hàng.');
     }
 
-    public function update(Request $request, int $item, CartService $cart): RedirectResponse
+    public function update(CartQuantityRequest $request, int $item, CartService $cart): RedirectResponse|JsonResponse
     {
-        $data = $request->validate(['quantity' => ['required', 'integer', 'min:1', 'max:999']]);
-        $cart->update($request->user(), $item, (int) $data['quantity']);
+        $data = $request->validated();
+        $quantity = (int) $data['quantity'];
+        $prices = $cart->update($request->user(), $item, $quantity);
         $request->session()->forget('checkout_token');
 
-        return back()->with('status', 'Đã cập nhật số lượng.');
+        return $this->mutationResponse($request, $cart, 'Đã cập nhật số lượng.', [
+            'cart_item' => ['id' => $item, 'quantity' => $quantity, ...$prices],
+        ]);
     }
 
-    public function destroy(Request $request, int $item, CartService $cart): RedirectResponse
+    public function destroy(Request $request, int $item, CartService $cart): RedirectResponse|JsonResponse
     {
         $cart->remove($request->user(), $item);
         $request->session()->forget('checkout_token');
 
-        return back()->with('status', 'Đã xóa sản phẩm khỏi giỏ hàng.');
+        return $this->mutationResponse($request, $cart, 'Đã xóa sản phẩm khỏi giỏ hàng.', ['removed_item_id' => $item]);
     }
 
-    public function clear(Request $request, CartService $cart): RedirectResponse
+    public function clear(Request $request, CartService $cart): RedirectResponse|JsonResponse
     {
         $cart->remove($request->user());
         $request->session()->forget('checkout_token');
 
-        return back()->with('status', 'Đã xóa giỏ hàng.');
+        return $this->mutationResponse($request, $cart, 'Đã xóa giỏ hàng.', ['cart_cleared' => true]);
+    }
+
+    private function mutationResponse(Request $request, CartService $cart, string $message, array $data = []): RedirectResponse|JsonResponse
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => $message,
+                'cart_quantity' => $cart->quantityFor($request->user()),
+                ...$data,
+            ]);
+        }
+
+        return back()->with('status', $message);
     }
 }

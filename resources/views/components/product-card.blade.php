@@ -12,15 +12,16 @@
                 @endif
             </p>
         </div>
-        <p class="product-price">{{ number_format($product->price, 0, ',', '.') }}đ</p>
+        <p class="product-price"><x-sale-price :price="$product->saleUnitPrice()" :regular-price="$product->regularUnitPrice()" /></p>
         @if (
             $product->is_active &&
                 $product->quantity > 0 &&
                 $product->price > 0 &&
                 (!$product->expiry_date || $product->expiry_date->gte(today())))
-            <form method="POST" action="{{ route('cart.store', $product) }}" data-ajax-action="cart">
+            <form class="product-card-actions" method="POST" action="{{ route('cart.store', $product) }}" data-ajax-action="cart">
                 @csrf<input type="hidden" name="quantity" value="1">
-                <x-button type="submit" variant="outline" class="full-width" :aria-label="'Thêm vào giỏ: ' . $product->name">Thêm vào giỏ</x-button>
+                <x-button type="submit" name="buy_now" value="1" class="full-width" :aria-label="'Mua ngay: ' . $product->name">Mua ngay</x-button>
+                <x-button type="submit" variant="outline" class="full-width" :aria-label="'Thêm vào giỏ hàng: ' . $product->name">Thêm vào giỏ hàng</x-button>
             </form>
         @endif
     </div>

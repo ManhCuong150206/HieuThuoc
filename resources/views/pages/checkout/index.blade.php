@@ -13,7 +13,10 @@
             <section class="checkout-panel">
                 <h2>Sản phẩm ({{ $items->sum('quantity') }})</h2>
                 @foreach ($items as $item)
-                    <div class="checkout-item"><span>{{ $item->name }} × {{ $item->quantity }}</span><strong>{{ number_format(round($item->price) * $item->quantity, 0, ',', '.') }}đ</strong></div>
+                    <div class="checkout-item">
+                        <span>{{ $item->product->name }} × {{ $item->quantity }}</span>
+                        <strong><x-sale-price :price="$item->subtotal()" :regular-price="$item->regularSubtotal()" /></strong>
+                    </div>
                 @endforeach
                 <a class="text-action" href="{{ route('cart.index') }}">Sửa giỏ hàng</a>
             </section>
@@ -41,21 +44,32 @@
         </div>
         <aside class="checkout-panel checkout-summary">
             <h2>Tóm tắt đơn hàng</h2>
+            @php
+                $selectedPromotion = old('promotion_id');
+                $selectedDiscount = is_numeric($selectedPromotion) ? ($promotionDiscounts[(int) $selectedPromotion] ?? 0) : 0;
+            @endphp
+            @if ($promotions->isNotEmpty())
             <div class="ui-field">
-                <label for="promotion">Ưu đãi hiện có</label>
+                <label for="promotion">Ưu đãi cho cả đơn</label>
                 <select id="promotion" name="promotion_id" data-promotion>
-                    <option value="" data-percent="0">Không áp dụng</option>
+                    <option value="" data-amount="0">Không áp dụng</option>
                     @foreach ($promotions as $promotion)
-                        <option value="{{ $promotion->id }}" data-percent="{{ $promotion->discount_percent }}" @selected((string) old('promotion_id') === (string) $promotion->id)>{{ $promotion->name }} — giảm {{ $promotion->discount_percent }}%</option>
+                        <option value="{{ $promotion->id }}" data-amount="{{ $promotionDiscounts[$promotion->id] }}" @selected(is_numeric($selectedPromotion) && (int) $selectedPromotion === $promotion->id)>{{ $promotion->name }} — giảm {{ $promotion->discount_percent }}%</option>
                     @endforeach
                 </select>
             </div>
+            @endif
             <dl class="summary-list">
                 <div><dt>Tạm tính</dt><dd>{{ number_format($subtotal, 0, ',', '.') }}đ</dd></div>
+                @if ($productSavings > 0)
+                    <div class="checkout-note"><dt>Đã giảm trên sản phẩm</dt><dd>{{ number_format($productSavings, 0, ',', '.') }}đ</dd></div>
+                @endif
                 <div><dt>Phí vận chuyển</dt><dd>{{ number_format($shippingFee, 0, ',', '.') }}đ</dd></div>
-                <div><dt>Giảm giá</dt><dd data-discount>0đ</dd></div>
+                @if ($promotions->isNotEmpty())
+                    <div><dt>Giảm thêm cho đơn</dt><dd data-discount>{{ number_format($selectedDiscount, 0, ',', '.') }}đ</dd></div>
+                @endif
             </dl>
-            <dl class="summary-total"><dt>Tổng thanh toán</dt><dd data-total>{{ number_format($subtotal + $shippingFee, 0, ',', '.') }}đ</dd></dl>
+            <dl class="summary-total"><dt>Tổng thanh toán</dt><dd data-total>{{ number_format($subtotal - $selectedDiscount + $shippingFee, 0, ',', '.') }}đ</dd></dl>
             <label class="check-label checkout-note"><input type="checkbox" name="terms" value="1" required @checked(old('terms'))> Tôi đồng ý với điều khoản mua hàng và chính sách bảo mật.</label>
             <x-button type="submit" class="full-width" data-place-order>Xác nhận đặt hàng</x-button>
             <p class="checkout-note">Ưu đãi, giá và tồn kho được kiểm tra lại khi xác nhận.</p>

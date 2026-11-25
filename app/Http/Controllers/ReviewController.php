@@ -3,28 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\OrderItem;
+use App\Services\ReviewService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 
 class ReviewController extends Controller
 {
-    public function store(Request $request, OrderItem $item): RedirectResponse
+    public function store(Request $request, OrderItem $item, ReviewService $reviews): RedirectResponse|JsonResponse
     {
         $data = $request->validate(['rating' => ['required', 'integer', 'between:1,5'], 'comment' => ['nullable', 'string', 'max:500']]);
-        DB::transaction(function () use ($request, $item, $data): void {
-            $order = $item->order()->lockForUpdate()->firstOrFail();
-            abort_unless($order->user_id === $request->user()->profile?->id, 404);
-            if ($order->status !== 'COMPLETED') {
-                throw ValidationException::withMessages(['review' => 'Chỉ được đánh giá đơn hàng đã hoàn thành.']);
-            }
-            if ($item->review()->exists()) {
-                throw ValidationException::withMessages(['review' => 'Sản phẩm trong đơn này đã được đánh giá.']);
-            }
-            $item->review()->create($data + ['status' => 'PENDING', 'created_at' => today()]);
-        });
+        $reviews->create($request->user(), $item, $data);
 
-        return back()->with('status', 'Đã gửi đánh giá, đang chờ duyệt.');
+        $message = 'Đánh giá đã được hiển thị.';
+
+        return $request->expectsJson() ? response()->json(['message' => $message], 201) : back()->with('status', $message);
     }
 }

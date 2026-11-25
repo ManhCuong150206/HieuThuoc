@@ -3,10 +3,11 @@
 namespace App\Services;
 
 use App\Models\Account;
+use App\Models\CartItem;
 use App\Models\CustomerProfile;
 use App\Models\Product;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -14,22 +15,26 @@ class CartService
 {
     private function queryFor(Account $account): Builder
     {
-        return DB::table('cart_items')->join('users', 'users.id', '=', 'cart_items.user_id')
-            ->where('users.account_id', $account->id);
+        return CartItem::where('user_id', $account->profile()->select('users.id')->toBase());
     }
 
     public function quantityFor(?Account $account): int
     {
-        return $account ? (int) $this->queryFor($account)->sum('cart_items.quantity') : 0;
+        return $account ? (int) $this->queryFor($account)->sum('quantity') : 0;
     }
 
-    public function itemsFor(Account $account): Collection
+    /** @return Collection<int, CartItem> */
+    public function itemsFor(Account $account, ?array $itemIds = null): Collection
     {
-        return $this->queryFor($account)->join('products', 'products.id', '=', 'cart_items.product_id')
-            ->select('cart_items.id', 'cart_items.product_id', 'cart_items.quantity', 'products.name',
-                'products.price', 'products.brand', 'products.image_url', 'products.quantity as stock',
-                'products.is_active', 'products.expiry_date')
-            ->orderBy('cart_items.id')->get();
+        return $this->queryFor($account)
+            ->when($itemIds !== null, fn (Builder $query) => $query->whereKey($itemIds))
+            ->with(['product' => fn ($product) => $product->withDiscountPercent()])
+            ->orderBy('id')->get()->filter(fn (CartItem $item) => $item->product !== null);
+    }
+
+    public function containsItems(Account $account, array $itemIds): bool
+    {
+        return $this->queryFor($account)->whereKey($itemIds)->whereHas('product')->count() === count($itemIds);
     }
 
     public function profile(Account $account, bool $lock = false): CustomerProfile
@@ -44,37 +49,43 @@ class CartService
 
     public function ensureAvailable(Product $product, int $quantity): void
     {
-        if (! $product->is_active || ($product->expiry_date && $product->expiry_date->lt(today()))) {
+        if (! $product->isAvailableForSale()) {
             throw ValidationException::withMessages(['cart' => $product->name.' hiện không còn bán hoặc đã hết hạn.']);
         }
         if ($product->price <= 0) {
             throw ValidationException::withMessages(['cart' => $product->name.' chưa có giá bán. Vui lòng chọn sản phẩm khác.']);
         }
-        if ($quantity > $product->quantity || $quantity > 999 || $quantity < 1) {
+        if ($quantity > $product->maxCartQuantity() || $quantity < 1) {
             throw ValidationException::withMessages(['cart' => $product->name.' chỉ còn '.$product->quantity.' sản phẩm; mỗi sản phẩm tối đa 999 đơn vị.']);
         }
     }
 
-    public function add(Account $account, int $productId, int $quantity): void
+    public function add(Account $account, int $productId, int $quantity): int
     {
-        DB::transaction(function () use ($account, $productId, $quantity): void {
+        return DB::transaction(function () use ($account, $productId, $quantity): int {
             $profile = $this->profile($account, true);
             $product = Product::lockForUpdate()->findOrFail($productId);
             $item = $profile->cartItems()->where('product_id', $productId)->first();
             $total = ($item?->quantity ?? 0) + $quantity;
             $this->ensureAvailable($product, $total);
-            $profile->cartItems()->updateOrCreate(['product_id' => $productId], ['quantity' => $total]);
+
+            return $profile->cartItems()->updateOrCreate(['product_id' => $productId], ['quantity' => $total])->id;
         }, 3);
     }
 
-    public function update(Account $account, int $itemId, int $quantity): void
+    public function update(Account $account, int $itemId, int $quantity): array
     {
-        DB::transaction(function () use ($account, $itemId, $quantity): void {
+        return DB::transaction(function () use ($account, $itemId, $quantity): array {
             $profile = $this->profile($account, true);
             $item = $profile->cartItems()->findOrFail($itemId);
-            $product = Product::lockForUpdate()->findOrFail($item->product_id);
+            $product = Product::withDiscountPercent()->lockForUpdate()->findOrFail($item->product_id);
             $this->ensureAvailable($product, $quantity);
             $item->update(['quantity' => $quantity]);
+
+            return [
+                'unit_price' => $product->saleUnitPrice(),
+                'regular_unit_price' => $product->regularUnitPrice(),
+            ];
         }, 3);
     }
 

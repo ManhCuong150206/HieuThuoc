@@ -6,6 +6,7 @@
 @import './home.css';
 @import './catalog.css';
 @import './transactions.css';
+@import './health-news.css';
 @import './admin.css';
 
 @source '../views/**/*.blade.php';
@@ -13,12 +14,12 @@
 
 /*
   Design tokens: the one place for colour, type, radius and shadow.
-  Palette from the logo's own green on a warm paper ground, like a pharmacy's paper bag;
-  display face Bricolage Grotesque, text face Be Vietnam Pro (both carry every Vietnamese mark).
+  Palette from the logo's own green on a warm paper ground, like a pharmacy's paper bag.
+  Inter is used for headings and body text.
 */
 @theme static {
-    --font-display: 'Bricolage Grotesque', 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
-    --font-sans: 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--font-sans);
 
     --radius-sm: 8px;
     --radius-md: 12px;
@@ -29,8 +30,7 @@
 
 /* Layout rhythm and the names the motion layer (public/assets/motion) reads; all values come from @theme. */
 :root {
-    --topbar: 36px;
-    --nav: calc(72px + var(--topbar));
+    --nav: 76px;
     --padt: 120px;
     --padb: 72px;
     --hgap: 48px;
@@ -67,8 +67,7 @@
 
 @media (max-width: 639px) {
     :root {
-        --topbar: 30px;
-        --nav: calc(56px + var(--topbar));
+        --nav: 64px;
         --padt: 96px;
         --padb: 48px;
         --hgap: 40px;

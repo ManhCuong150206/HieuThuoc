@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Promotion;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
@@ -26,13 +27,53 @@ class CatalogTest extends TestCase
 
     public function test_header_and_home_use_database_categories(): void
     {
-        $this->get('/')->assertOk()->assertSee('aria-controls="header-category-list"', false)
+        $response = $this->get('/')->assertOk()->assertSee('aria-controls="header-category-list"', false)
             ->assertSee('Thuốc không kê đơn')->assertSee('Danh mục trống')
             ->assertSee('href="'.route('categories.show', 2).'"', false)
+            ->assertDontSee('id="san-pham-giam-gia"', false)
             ->assertSee('Chưa có sản phẩm bán chạy.')->assertDontSee('Sản phẩm ngừng bán');
+
+        preg_match('~<ul[^>]*id="header-category-list"[^>]*>(.*?)</ul>~s', $response->getContent(), $menu);
+        preg_match_all('~href="([^"]+)"~', $menu[1] ?? '', $links);
+        $this->assertSame([
+            route('categories.show', 1),
+            route('categories.show', 2),
+            route('categories.show', 3),
+        ], $links[1]);
 
         DB::table('categories')->insert(['id' => 9, 'name' => 'Danh mục mới thêm trong DB']);
         $this->get('/san-pham')->assertSee('Danh mục mới thêm trong DB');
+    }
+
+    public function test_home_previews_current_sale_products_and_links_to_the_filtered_catalog(): void
+    {
+        $offer = Promotion::create([
+            'name' => 'Giảm giá đang chạy', 'discount_percent' => 20,
+            'starts_at' => today(), 'ends_at' => today()->addWeek(),
+            'is_active' => true, 'applies_to_all_products' => false,
+        ]);
+        $offer->products()->attach([1, 4]);
+        $expired = $offer->replicate()->fill(['starts_at' => today()->subWeek(), 'ends_at' => today()->subDay()]);
+        $expired->save();
+        $expired->products()->attach(2);
+
+        $this->get('/')->assertOk()
+            ->assertSeeInOrder(['Sản phẩm đang giảm giá', 'Sản phẩm DB A', '20.000đ', '16.000đ', 'Sản phẩm bán chạy'])
+            ->assertDontSee('5 mục thông tin trên mỗi sản phẩm')
+            ->assertDontSee('Sản phẩm DB B')->assertDontSee('Sản phẩm ngừng bán')
+            ->assertSee('href="'.route('products.index', ['on_sale' => 1]).'"', false);
+
+        foreach (range(5, 11) as $id) {
+            DB::table('products')->insert(['id' => $id, 'category_id' => 1, 'name' => 'Sản phẩm '.$id, 'price' => 10000]);
+        }
+        $offer->products()->attach(range(5, 11));
+        $this->get('/')->assertOk()->assertViewHas('saleProducts', fn ($products) => $products->count() === 4);
+        $this->get('/san-pham?on_sale=1&sort=price_asc')->assertOk()
+            ->assertSee('Sản phẩm đang giảm giá')->assertDontSee('Sản phẩm DB B')
+            ->assertViewHas('products', fn ($products) => $products->total() === 8
+                && str_contains($products->nextPageUrl(), 'on_sale=1'));
+        $this->get('/san-pham?on_sale=1&sort=price_asc&page=2')->assertOk()
+            ->assertViewHas('products', fn ($products) => $products->pluck('id')->all() === [11, 1]);
     }
 
     public function test_home_ranks_active_products_by_units_in_fulfilled_orders(): void

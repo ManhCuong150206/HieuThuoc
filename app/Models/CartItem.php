@@ -16,6 +16,16 @@ class CartItem extends Model
         return ['quantity' => 'integer'];
     }
 
+    public function subtotal(): int
+    {
+        return $this->product->saleUnitPrice() * $this->quantity;
+    }
+
+    public function regularSubtotal(): int
+    {
+        return $this->product->regularUnitPrice() * $this->quantity;
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(CustomerProfile::class, 'user_id');

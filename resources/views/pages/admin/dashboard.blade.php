@@ -7,8 +7,37 @@
         <div class="admin-panel metric"><h2>{{ $label }}</h2><p>{{ $value }}</p></div>
     @endforeach
 </section>
+<section class="admin-panel admin-sales" aria-labelledby="daily-sales-heading">
+    <header class="admin-sales-heading">
+        <div>
+            <h2 id="daily-sales-heading">Sản phẩm bán theo ngày</h2>
+            <p>Số lượng sản phẩm trong đơn đã giao hoặc hoàn thành, tính theo ngày đặt.</p>
+        </div>
+        <p class="admin-sales-range">
+            {{ $dailySales->first()['date']->format('d/m/Y') }} – {{ $dailySales->last()['date']->format('d/m/Y') }}
+        </p>
+    </header>
+    <ol class="admin-sales-chart" role="list">
+        @foreach ($dailySales as ['date' => $date, 'units' => $units])
+            @php($isPeak = $units > 0 && $units === $peakDailySales)
+            <li @class(['admin-sales-day', 'admin-sales-day-peak' => $isPeak])>
+                <time datetime="{{ $date->toDateString() }}">{{ $date->format('d/m') }}</time>
+                <div class="admin-sales-column">
+                    <div class="admin-sales-bar" style="--bar-height: {{ 100 * $units / max(1, $peakDailySales) }}%">
+                        <span class="admin-sales-value">
+                            {{ number_format($units, 0, ',', '.') }}<span class="sr-only"> sản phẩm{{ $isPeak ? ', cao nhất trong kỳ' : '' }}</span>
+                        </span>
+                    </div>
+                </div>
+            </li>
+        @endforeach
+    </ol>
+</section>
 <section class="admin-panel">
-    <h2>Đơn hàng gần đây</h2>
+    <header class="admin-heading admin-panel-heading">
+        <h2>Đơn hàng gần đây</h2>
+        <x-button variant="outline" :href="route('admin.report')">Xuất báo cáo CSV</x-button>
+    </header>
     <div class="admin-table-scroll"><table class="data-table">
         <thead><tr><th>Mã đơn</th><th>Người nhận</th><th class="num">Tổng tiền</th><th>Trạng thái</th></tr></thead>
         <tbody>@forelse ($orders as $order)
@@ -16,15 +45,4 @@
         @empty<tr><td colspan="4">Chưa có đơn hàng.</td></tr>@endforelse</tbody>
     </table></div>
 </section>
-<div class="admin-analysis">
-    <section class="admin-panel">
-        <h2>Tồn kho từ 5 sản phẩm trở xuống</h2>
-        <ul class="admin-list">@forelse ($lowStock as $product)<li><a href="{{ route('admin.resources.edit', ['resource' => 'products', 'record' => $product->id]) }}">{{ $product->name }}</a><strong>{{ $product->quantity }}</strong></li>@empty<li>Không có sản phẩm sắp hết.</li>@endforelse</ul>
-        <a class="text-action" href="{{ route('admin.resources.index', 'products') }}">Cập nhật tồn kho</a>
-    </section>
-    <section class="admin-panel">
-        <h2>Hết hạn / hết hạn trong 30 ngày</h2>
-        <ul class="admin-list">@forelse ($expiring as $product)<li><a href="{{ route('admin.resources.edit', ['resource' => 'products', 'record' => $product->id]) }}">{{ $product->name }}</a><span>{{ $product->expiry_date->format('d/m/Y') }}</span></li>@empty<li>Không có cảnh báo hạn dùng.</li>@endforelse</ul>
-    </section>
-</div>
 @endsection

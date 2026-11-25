@@ -33,20 +33,6 @@ class AjaxShoppingTest extends TestCase
         $this->assertDatabaseCount('cart_items', 2);
     }
 
-    public function test_ajax_favorite_is_saved_once_and_returns_saved_state(): void
-    {
-        $user = User::factory()->create();
-        $product = $this->product();
-        $this->actingAs($user->account);
-        foreach ([1, 2] as $attempt) {
-            $this->postJson(route('favorites.store', $product))->assertOk()
-                ->assertJsonPath('saved', true)->assertJsonPath('product_id', $product->id)
-                ->assertSessionMissing('status');
-        }
-        $this->assertDatabaseCount('favorites', 1);
-        $this->assertDatabaseHas('favorites', ['user_id' => $user->id, 'product_id' => $product->id]);
-    }
-
     public function test_ajax_validation_errors_are_json_and_do_not_change_stock_or_cart(): void
     {
         $user = User::factory()->create();
@@ -59,13 +45,37 @@ class AjaxShoppingTest extends TestCase
         $this->assertSame(10, $product->fresh()->quantity);
     }
 
-    public function test_ajax_guest_gets_unauthorized_json_for_both_actions(): void
+    public function test_cart_forms_update_and_delete_using_json_without_redirects(): void
+    {
+        $user = User::factory()->create();
+        $product = $this->product();
+        $item = $user->cartItems()->create(['product_id' => $product->id, 'quantity' => 2]);
+        $other = $user->cartItems()->create(['product_id' => $this->product()->id, 'quantity' => 3]);
+        $headers = ['Accept' => 'application/json', 'X-Requested-With' => 'XMLHttpRequest'];
+
+        $this->actingAs($user->account)->withSession(['checkout_token' => 'old-token'])
+            ->post(route('cart.update', $item), ['_method' => 'PUT', 'quantity' => 4], $headers)
+            ->assertOk()->assertJsonPath('cart_quantity', 7)
+            ->assertJsonPath('cart_item.id', $item->id)
+            ->assertJsonPath('cart_item.quantity', 4)->assertJsonPath('cart_item.unit_price', 50000)
+            ->assertSessionMissing('status')->assertSessionMissing('checkout_token');
+        $this->post(route('cart.update', $item), ['_method' => 'PUT', 'quantity' => 11], $headers)
+            ->assertUnprocessable()->assertJsonValidationErrors('cart');
+        $this->assertSame(4, $item->fresh()->quantity);
+
+        $this->post(route('cart.destroy', $item), ['_method' => 'DELETE'], $headers)
+            ->assertOk()->assertJsonPath('removed_item_id', $item->id)->assertJsonPath('cart_quantity', 3);
+        $this->assertModelExists($other);
+        $this->post(route('cart.clear'), ['_method' => 'DELETE'], $headers)
+            ->assertOk()->assertJsonPath('cart_cleared', true)->assertJsonPath('cart_quantity', 0);
+        $this->assertDatabaseCount('cart_items', 0);
+    }
+
+    public function test_ajax_guest_cannot_add_items_to_cart(): void
     {
         $product = $this->product();
         $this->postJson(route('cart.store', $product), ['quantity' => 1])->assertUnauthorized();
-        $this->postJson(route('favorites.store', $product))->assertUnauthorized();
         $this->assertDatabaseCount('cart_items', 0);
-        $this->assertDatabaseCount('favorites', 0);
     }
 
     public function test_locked_account_gets_json_instead_of_html_redirect(): void
@@ -82,10 +92,13 @@ class AjaxShoppingTest extends TestCase
     public function test_product_pages_enable_ajax_for_add_buttons_and_keep_buy_now(): void
     {
         $product = $this->product();
-        $this->get(route('products.index'))->assertOk()->assertSee('data-ajax-action="cart"', false);
+        $this->get(route('products.index'))->assertOk()
+            ->assertSee('data-ajax-action="cart"', false)
+            ->assertSee('name="buy_now" value="1"', false)
+            ->assertSee('Thêm vào giỏ hàng');
         $this->get(route('products.show', $product))->assertOk()
             ->assertSee('data-ajax-action="cart"', false)
-            ->assertSee('data-ajax-action="favorite"', false)
+            ->assertDontSee('Lưu yêu thích')
             ->assertSee('name="buy_now" value="1"', false)
             ->assertSee('data-cart-count', false);
     }
